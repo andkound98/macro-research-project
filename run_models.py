@@ -8,7 +8,7 @@ Created on Thu Dec  8 14:27:44 2022
 
 ###############################################################################
 ###############################################################################
-# This script compares RANK and TANK after different shocks
+# This script compares RANK and TANK models after different shocks
 ###############################################################################
 ###############################################################################
 
@@ -24,13 +24,12 @@ pio.renderers.default = "svg" # For plotting in the Spyder window
 ###############################################################################
 
 # Load and solve RANK
-rank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_rank.yaml"
+rank = "/models/med_scale_rank.yaml" # Set path here
 rank_mod = ep.load(rank)
 _ = rank_mod.solve_stst()
 
 # Load and solve TANK
-tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank.yaml"
-#tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank_extension.yaml" # Load the extension TANK file
+tank = "/models/med_scale_tank.yaml" # Set path here
 tank_mod = ep.load(tank)
 _ = tank_mod.solve_stst()
 
