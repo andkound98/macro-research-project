@@ -8,7 +8,7 @@ Created on Thu Dec  8 14:27:44 2022
 
 ###############################################################################
 ###############################################################################
-# This script compares RANK and TANK models after different shocks
+# This script compares RANK and TANK after different shocks
 ###############################################################################
 ###############################################################################
 
@@ -24,12 +24,13 @@ pio.renderers.default = "svg" # For plotting in the Spyder window
 ###############################################################################
 
 # Load and solve RANK
-rank = "/models/med_scale_rank.yaml" # Set path here
+rank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_rank.yaml" # Set path here
 rank_mod = ep.load(rank)
 _ = rank_mod.solve_stst()
 
 # Load and solve TANK
-tank = "/models/med_scale_tank.yaml" # Set path here
+tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank.yaml" # Set path here
+#tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank_extension_2.yaml" # Load the extension TANK file
 tank_mod = ep.load(tank)
 _ = tank_mod.solve_stst()
 
@@ -37,8 +38,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify shock here (one at a time)
-specific_shock = ('e_beta', 0.02) # Discount factor shock
-#specific_shock = ('e_z', 0.02) # Technology shock
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock
 #specific_shock = ('e_m', 0.02) # Monetary poilicy shock
 
 ###############################################################################
@@ -136,13 +137,16 @@ percent = 100 # Turn to 100 (1) if impulse response should (not) be in percent
 
 # Aggregate Consumption 
 agg_consumption = np.column_stack([time, percent*((rank_x[:horizon,rank_c] - stst_rank_c)/stst_rank_c), percent*((tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c)]) # Concatenate data 
-agg_consumption = pd.DataFrame(agg_consumption, columns = ['Quarters', 'RANK Consumption', 'TANK Consumption']) # Turn data into data frame
+agg_consumption = pd.DataFrame(agg_consumption, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
-fig = px.line(agg_consumption, x = "Quarters", y = ['RANK Consumption', 'TANK Consumption'])
+fig = px.line(agg_consumption, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Consumption', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict( # For horizontal legend
     orientation="h",
     yanchor="bottom",
@@ -150,19 +154,23 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
 
 # Aggregate Labour Hours
 agg_labour = np.column_stack([time, percent*((rank_x[:horizon,rank_n] - stst_rank_n)/stst_rank_n), percent*((tank_x[:horizon,tank_n] - stst_tank_n)/stst_tank_n)]) # Concatenate data 
-agg_labour = pd.DataFrame(agg_labour, columns = ['Quarters', 'RANK Labour', 'TANK Labour']) # Turn data into data frame
+agg_labour = pd.DataFrame(agg_labour, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
-fig = px.line(agg_labour, x = "Quarters", y = ['RANK Labour', 'TANK Labour'])
+fig = px.line(agg_labour, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Labour Hours', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict(
     orientation="h", # For horizontal legend
     yanchor="bottom",
@@ -170,6 +178,7 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
@@ -179,10 +188,13 @@ inflation = np.column_stack([time, percent*((rank_x[:horizon,rank_pi] - stst_ran
 inflation = pd.DataFrame(inflation, columns = ['Quarters', 'RANK', 'TANK'])
 
 # Plotting
-fig = px.line(inflation, x = "Quarters", y = ['RANK', 'TANK'])
+fig = px.line(inflation, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Inflation', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict( 
     orientation="h", # For horizontal legend
     yanchor="bottom",
@@ -190,6 +202,7 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
@@ -199,10 +212,13 @@ wages = np.column_stack([time, percent*((rank_x[:horizon,rank_w] - stst_rank_w)/
 wages = pd.DataFrame(wages, columns = ['Quarters', 'RANK', 'TANK'])
 
 # Plotting
-fig = px.line(wages, x = "Quarters", y = ['RANK', 'TANK'])
+fig = px.line(wages, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Real Wage', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict( 
     orientation="h", # For horizontal legend
     yanchor="bottom",
@@ -210,6 +226,7 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
@@ -219,10 +236,13 @@ interest = np.column_stack([time, percent*((rank_x[:horizon,rank_r] - stst_rank_
 interest = pd.DataFrame(interest, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
-fig = px.line(interest, x = "Quarters", y = ['RANK', 'TANK'])
+fig = px.line(interest, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Nominal Interest Rate', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict(
     orientation="h", # For horizontal legend
     yanchor="bottom",
@@ -230,6 +250,7 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
@@ -239,10 +260,13 @@ output = np.column_stack([time, percent*((rank_x[:horizon,rank_y] - stst_rank_y)
 output = pd.DataFrame(output, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
-fig = px.line(output, x = "Quarters", y = ['RANK', 'TANK'])
+fig = px.line(output, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Output', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict(
     orientation="h", # For horizontal legend
     yanchor="bottom",
@@ -250,6 +274,7 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
@@ -263,11 +288,12 @@ consumption = pd.DataFrame(consumption, columns = ['Quarters', 'TANK Hand-to-Mou
 
 # Plotting
 fig = px.line(consumption, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
-              color_discrete_map={'TANK Hand-to-Mouth': 'green', 
-                                  'TANK Unconstrained': 'orange'}) # , 'RANK Consumption', 'TANK Consumption'
+              color_discrete_map={'RANK Hand-to-Mouth': '#00CC96', 
+                                  'TANK Unconstrained': '#FF6692'}) # , 'RANK Consumption', 'TANK Consumption'
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Consumption', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict( # For horizontal legend
     orientation="h",
     yanchor="bottom",
@@ -275,6 +301,7 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
@@ -285,11 +312,12 @@ labour = pd.DataFrame(labour, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK
 
 # Plotting
 fig = px.line(labour, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
-              color_discrete_map={'TANK Hand-to-Mouth': 'green', 
-                                  'TANK Unconstrained': 'orange'}) # , 'RANK Labour', 'TANK Labour'
+              color_discrete_map={'RANK Hand-to-Mouth': '#00CC96', 
+                                  'TANK Unconstrained': '#FF6692'}) # , 'RANK Labour', 'TANK Labour'
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Labour Hours', # y-axis labeling
+                   font=dict(size=20),
                    legend=dict(
     orientation="h", # For horizontal legend
     yanchor="bottom",
@@ -297,4 +325,5 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke')
+fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
