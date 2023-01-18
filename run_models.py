@@ -30,7 +30,7 @@ _ = rank_mod.solve_stst()
 
 # Load and solve TANK
 tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank.yaml" # Set path here
-#tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank_extension_2.yaml" # Load the extension TANK file
+#tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank_KaplanVersion.yaml" # Load the extension TANK file
 tank_mod = ep.load(tank)
 _ = tank_mod.solve_stst()
 
@@ -38,8 +38,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify shock here (one at a time)
-specific_shock = ('e_z', 0.02) # Technology shock
-#specific_shock = ('e_beta', 0.02) # Discount factor shock
+#specific_shock = ('e_z', 0.02) # Technology shock
+specific_shock = ('e_beta', 0.02) # Discount factor shock
 #specific_shock = ('e_m', 0.02) # Monetary poilicy shock
 
 ###############################################################################
@@ -133,7 +133,7 @@ percent = 100 # Turn to 100 (1) if impulse response should (not) be in percent
 ###############################################################################
 ###############################################################################
 
-# Aggregate Responses 
+# Aggregate Responses (for RANK vs TANK)
 
 # Aggregate Consumption 
 agg_consumption = np.column_stack([time, percent*((rank_x[:horizon,rank_c] - stst_rank_c)/stst_rank_c), percent*((tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c)]) # Concatenate data 
@@ -153,7 +153,8 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
@@ -177,7 +178,8 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
@@ -201,7 +203,8 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
@@ -225,7 +228,8 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
@@ -249,7 +253,8 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
@@ -273,14 +278,15 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
 ###############################################################################
 ###############################################################################
 
-# Individual-Level Responses 
+# Individual-Level Responses (for TANK)
 
 # Consumption 
 consumption = np.column_stack([time, percent*((tank_x[:horizon,tank_chh] - stst_tank_chh)/stst_tank_chh), percent*((tank_x[:horizon,tank_cuu] - stst_tank_cuu)/stst_tank_cuu)]) # , (rank_x[:horizon,rank_c] - stst_rank_c)/stst_rank_c, (tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c
@@ -300,7 +306,8 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot
 
@@ -324,6 +331,7 @@ fig.update_layout(title='', # Empty title
     y=1.02,
     xanchor="right",
     x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke')
+), legend_title=None, plot_bgcolor = 'whitesmoke', 
+margin=dict(l=15, r=15, t=15, b=15))
 fig.update_traces(line=dict(width=3))
 fig.show() # Display plot

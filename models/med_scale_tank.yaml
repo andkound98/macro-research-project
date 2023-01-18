@@ -3,7 +3,7 @@
 # Description: a medium-scale two-agent NK model (TANK) with
 # capital, capital adjustement costs, capital utilization costs and habits
 # The original RANK version of the model is by Gregor Boehl, PhD
-# The present version of the model is by Andreas Koundouros
+# The present version of the model is by Andreas Koundouros [koundouros.andreas@gmail.com]
 ---
 
 name: 'tank'
@@ -30,10 +30,6 @@ equations:
     ~ c = (1-lam)*cuu + lam*chh # aggregate consumption
     ~ n = (1-lam)*nuu + lam*nhh # aggregate labour hours
 
-      # capital
-    ~ 1 = q*(1 - Phi/2*(i/iLag - 1)**2 - Phi*(i/iLag - 1)*i/iLag) + hhdf*qPrime*Phi*(iPrime/i - 1)*(iPrime/i)**2 # capital Euler equation
-    ~ k = (1-delta)*kLag + (1 - Phi/2*(i/iLag - 1)**2)*i # law of motion for capital
-
       # "BANKS" BLOCK
     ~ ds = qb*b + q*k # supply of "bank" deposits, i.e. the "banks" balance sheet
     ~ R = (1 + kappa*qbPrime)/qb # no arbitrage condition for the bond price 
@@ -44,10 +40,6 @@ equations:
     ~ g + (1+kappa*qb)/pi*bLag = qb*b + t # government budget constraint
     ~ g = 0.2*ySS # level of government spending
     ~ b = ySS/qbSS # level of outstanding government bonds, i.e. level of government debt
-
-      # clearing conditions
-    ~ c + i + g + Phi/2*(i/iLag - 1)**2*i + cap_util_costs*kLag = (1-psi*(pi/pitildeLag - 1)**2/2)*y_prod # goods market clearing
-    ~ c + i + g = y # definition of "effective" output
 
       # FIRMS BLOCK
     ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2 # capital 
@@ -64,7 +56,13 @@ equations:
     ~ R = max(1, Rn) # (actual) nominal interest rate, subject to ZLB
     
       # FURTHER EQUATIONS
-      
+      # clearing conditions
+    ~ c + i + g + Phi/2*(i/iLag - 1)**2*i + cap_util_costs*kLag = (1-psi*(pi/pitildeLag - 1)**2/2)*y_prod # goods market clearing
+    ~ c + i + g = y # definition of "effective" output
+    
+      # capital
+    ~ 1 = q*(1 - Phi/2*(i/iLag - 1)**2 - Phi*(i/iLag - 1)*i/iLag) + hhdf*qPrime*Phi*(iPrime/i - 1)*(iPrime/i)**2 # investment Euler equation
+    ~ k = (1-delta)*kLag + (1 - Phi/2*(i/iLag - 1)**2)*i # law of motion for capital
       
       # exogenous processes
     ~ z = zSS*(zLag/zSS)**rho_z*exp(e_z) # technology shock
@@ -81,16 +79,16 @@ steady_state:
         alpha: 0.33 # capital income share
         Phi: 5.6 # parameter on the costs of investment adjustment 
         phi_pi: 1.5 # Taylor rule coefficient on inflation 
-        phi_y: 0.1 # Taylor rule coefficient on output
-        h: .44 # habit formation parameter
-        rho: .8 # persistence in (notional) nominal interest rate 
-        eta: .33 # inverse of Frisch elasticity of labour supply
-        rho_beta: .8 # persistence of discount factor shock
+        phi_y: 0.125 # Taylor rule coefficient on output
+        h: 0.44 # habit formation parameter
+        rho: 0.8 # persistence in (notional) nominal interest rate 
+        eta: 1. # inverse of Frisch elasticity of labour supply
+        rho_beta: 0.8 # persistence of discount factor shock
         par_cap_util1: 0.8 # second parameter on the capital utilisation costs
-        rho_m: .8 # persistence of monetary policy shocks
-        rho_z: .8 # persistence of technology shocks
-        omega: .44 # coefficient on inflation target in inflation indexation
-        lam: .4 # fraction of hand-to-mouth agents
+        rho_m: 0.8 # persistence of monetary policy shocks
+        rho_z: 0.8 # persistence of technology shocks
+        omega: 0.44 # coefficient on inflation target in inflation indexation
+        lam: 0.2 # fraction of hand-to-mouth agents
 
         # steady state
         beta: 0.98 # steady state discount factor
@@ -99,7 +97,7 @@ steady_state:
         R: pi/beta # steady state nominal interest rate
         Rn: R # steady state notional nominal interest rate
         Rk: R # steady state rental rate of capital
-        nuu: .33 # steady state labour hours of unconstrained households
+        nuu: 0.33 # steady state labour hours of unconstrained households
         mc: (theta-1)/theta # steady state marginal costs
         q: 1. # steady state value of capital in consumption units
         v: 1. # steady state monetary policy shock
