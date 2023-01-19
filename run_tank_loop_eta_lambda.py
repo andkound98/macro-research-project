@@ -124,14 +124,14 @@ fig = px.line(impact_eta_lambda, markers = True,
               # ['#636EFA', '#FFA15A', '#EF553B', '#00CC96', '#19D3F3', '#FECB52']
               labels={'0.33': "hello"}) 
 fig.update_yaxes(range=[-4, 0.]) # Fix range of y-axis
-fig.update_traces(line=dict(width=3), 
-                  marker=dict(size=10))
+fig.update_traces(line=dict(width=4), 
+                  marker=dict(size=12))
 fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
                                       legendgroup = newnames[t.name],
                                       hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])))
 fig.update_layout(title='', # Empty title
                    xaxis_title="\u03BB", # x-axis labeling
-                   yaxis_title='Relative Consumption Impact', # y-axis labeling
+                   yaxis_title='Consumption Impact Rel. to RANK', # y-axis labeling
                    plot_bgcolor = 'whitesmoke', 
                    font=dict(size=20), 
                    margin=dict(l=15, r=15, t=5, b=5), legend=dict(

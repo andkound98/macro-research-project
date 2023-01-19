@@ -30,7 +30,6 @@ _ = rank_mod.solve_stst()
 
 # Load and solve TANK
 tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank.yaml" # Set path here
-#tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank_KaplanVersion.yaml" # Load the extension TANK file
 tank_mod = ep.load(tank)
 _ = tank_mod.solve_stst()
 
@@ -38,8 +37,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify shock here (one at a time)
-#specific_shock = ('e_z', 0.02) # Technology shock
-specific_shock = ('e_beta', 0.02) # Discount factor shock
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock
 #specific_shock = ('e_m', 0.02) # Monetary poilicy shock
 
 ###############################################################################
@@ -54,7 +53,15 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 ###############################################################################
 ###############################################################################
 
-# Extract relevant variables
+# If desired, make plots for all variables
+# Below, plots of key variables are created
+
+###############################################################################
+###############################################################################
+
+# Preparations for plots of key variables 
+
+# Extract key variables
 varlist_rank = 'c', 'n', 'pi', 'R', 'Rn', 'y', 'w'
 varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'Rn', 'y', 'w'
 
@@ -62,16 +69,16 @@ indx_rank = [rank_mod['variables'].index(v) for v in varlist_rank]
 indx_tank = [tank_mod['variables'].index(v) for v in varlist_tank]
 
 # Consumption
-rank_c = indx_rank[0]
-tank_c = indx_tank[0]
-tank_cuu =indx_tank[1]
-tank_chh = indx_tank[2]
+rank_c = indx_rank[0] # Aggregate consumption RANK
+tank_c = indx_tank[0] # Aggregate consumption TANK
+tank_cuu =indx_tank[1] # Unconstrained agents' consumption TANK
+tank_chh = indx_tank[2] # Hand-to-mouth agents' consumption TANK
 
 # Labour hours
-rank_n = indx_rank[1]
-tank_n = indx_tank[3]
-tank_nuu =indx_tank[4]
-tank_nhh = indx_tank[5]
+rank_n = indx_rank[1] # Aggregate labour hours RANK
+tank_n = indx_tank[3] # Aggregate labour hours TANK
+tank_nuu =indx_tank[4] # Unconstrained agents' labour hours TANK
+tank_nhh = indx_tank[5] # Hand-to-mouth agents' labour hours TANK
 
 # Inflation
 rank_pi = indx_rank[2]
@@ -83,9 +90,7 @@ tank_w = indx_tank[10]
 
 # Interest Rates
 rank_r = indx_rank[3]
-rank_rn = indx_rank[4]
 tank_r = indx_tank[7]
-tank_rn = indx_tank[8]
 
 # Output 
 rank_y = indx_rank[5]
@@ -93,7 +98,7 @@ tank_y = indx_tank[9]
 
 ###############################################################################
 
-# Extract relevant steady state values
+# Extract steady state values corresponding to the key variables
 # Consumption
 stst_rank_c = rank_x[-1,rank_c]
 stst_tank_c = tank_x[-1,tank_c]
@@ -154,9 +159,16 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_agg_c.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_agg_c.svg")
 
 ###############################################################################
 
@@ -179,9 +191,16 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_agg_n.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_agg_n.svg")
 
 ###############################################################################
 
@@ -204,9 +223,16 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_infl.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_infl.svg")
 
 ###############################################################################
 
@@ -229,9 +255,16 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_wage.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_wage.svg")
 
 ###############################################################################
 
@@ -254,9 +287,16 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_interest.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_interest.svg")
 
 ###############################################################################
 
@@ -279,9 +319,16 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_output.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_output.svg")
 
 ###############################################################################
 ###############################################################################
@@ -307,9 +354,16 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_ind_c.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_ind_c.svg")
 
 ###############################################################################
 
@@ -332,6 +386,13 @@ fig.update_layout(title='', # Empty title
     xanchor="right",
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=15, b=15))
-fig.update_traces(line=dict(width=3))
+margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=4))
 fig.show() # Display plot
+
+# Store plot
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_ind_n.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_ind_n.svg")

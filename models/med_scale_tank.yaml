@@ -88,7 +88,7 @@ steady_state:
         rho_m: 0.8 # persistence of monetary policy shocks
         rho_z: 0.8 # persistence of technology shocks
         omega: 0.44 # coefficient on inflation target in inflation indexation
-        lam: 0.2 # fraction of hand-to-mouth agents
+        lam: 0.3 # fraction of hand-to-mouth agents
 
         # steady state
         beta: 0.98 # steady state discount factor
