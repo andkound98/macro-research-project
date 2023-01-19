@@ -37,9 +37,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify shock here (one at a time)
-#specific_shock = ('e_z', 0.02) # Technology shock
-specific_shock = ('e_beta', 0.02) # Discount factor shock
-#specific_shock = ('e_m', 0.02) # Monetary poilicy shock
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock
 
 ###############################################################################
 ###############################################################################
@@ -55,6 +54,8 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 
 # If desired, make plots for all variables
 # Below, plots of key variables are created
+
+
 
 ###############################################################################
 ###############################################################################
