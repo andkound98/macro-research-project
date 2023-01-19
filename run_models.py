@@ -37,8 +37,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify shock here (one at a time)
-specific_shock = ('e_z', 0.02) # Technology shock
-#specific_shock = ('e_beta', 0.02) # Discount factor shock
+#specific_shock = ('e_z', 0.02) # Technology shock
+specific_shock = ('e_beta', 0.02) # Discount factor shock
 
 ###############################################################################
 ###############################################################################

@@ -21,10 +21,6 @@ equations:
     ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c)
     ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
 
-      # capital
-    ~ 1 = q*(1 - Phi/2*(i/iLag - 1)**2 - Phi*(i/iLag - 1)*i/iLag) + hhdf*qPrime*Phi*(iPrime/i - 1)*(iPrime/i)**2
-    ~ k = (1-delta)*kLag + (1 - Phi/2*(i/iLag - 1)**2)*i
-
       # "banks"
     ~ ds = qb*b + q*k
     ~ R = (1 + kappa*qbPrime)/qb
@@ -35,10 +31,6 @@ equations:
     ~ g + t + (1+kappa*qb)/pi*bLag = qb*b
     ~ g = 0.2*ySS
     ~ b = ySS/qbSS
-
-      # clearing
-    ~ c + i + g + Phi/2*(i/iLag - 1)**2*i + cap_util_costs*kLag = (1-psi*(pi/pitildeLag - 1)**2/2)*y_prod
-    ~ c + i + g = y
 
       # firms
     ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2
@@ -53,16 +45,25 @@ equations:
       # central bank
     ~ Rn = ((RSS*((pi/piSS)**phi_pi)*((y/ySS)**phi_y))**(1-rho)*RnLag**rho)*v # Taylor rule
     ~ R = max(1, Rn)
-
-      # exogenous
-    ~ z = zSS*(zLag/zSS)**rho_z*exp(e_z) # Technology shock
-    ~ beta = betaSS*(betaLag/betaSS)**rho_beta*exp(e_beta) # Discount factor shock
-    ~ v = vSS*(vLag/vSS)**rho_m*exp(e_m) # Monetary policy shock
+    
+      # FURTHER EQUATIONS
+      # clearing conditions
+    ~ c + i + g + Phi/2*(i/iLag - 1)**2*i + cap_util_costs*kLag = (1-psi*(pi/pitildeLag - 1)**2/2)*y_prod # goods market clearing
+    ~ c + i + g = y # definition of "effective" output
+  
+      # capital
+    ~ 1 = q*(1 - Phi/2*(i/iLag - 1)**2 - Phi*(i/iLag - 1)*i/iLag) + hhdf*qPrime*Phi*(iPrime/i - 1)*(iPrime/i)**2 # investment Euler equation
+    ~ k = (1-delta)*kLag + (1 - Phi/2*(i/iLag - 1)**2)*i # law of motion for capital
+    
+      # exogenous processes
+    ~ z = zSS*(zLag/zSS)**rho_z*exp(e_z) # technology shock
+    ~ beta = betaSS*(betaLag/betaSS)**rho_beta*exp(e_beta) # discount factor shock
+    ~ v = vSS*(vLag/vSS)**rho_m*exp(e_m) # monetary policy shock
 
 steady_state:
     fixed_values:
         # parameters:
-        theta: 6.
+        theta: 6. # elasticity of substitution
         kappa: 0.975
         psi: 59.11
         delta: 0.025

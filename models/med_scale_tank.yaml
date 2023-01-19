@@ -105,7 +105,6 @@ steady_state:
         pitilde: pi # steady state price indexed inflation
         cap_util: 1.
 
-    init_guesses: # Use this block to specify initial guesses for root-finding 
-    # of steady state
+    init_guesses:
         chi: 1e+1
         MPK: alpha*mc/20
