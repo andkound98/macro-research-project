@@ -24,12 +24,12 @@ pio.renderers.default = "svg" # For plotting in the Spyder window
 ###############################################################################
 
 # Load and solve RANK
-rank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_rank.yaml" # Set path here
+rank = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_rank.yaml" # Set path here
 rank_mod = ep.load(rank)
 _ = rank_mod.solve_stst()
 
 # Load and solve TANK
-tank = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank.yaml" # Set path here
+tank = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_tank.yaml" # Set path here
 tank_mod = ep.load(tank)
 _ = tank_mod.solve_stst()
 
@@ -37,8 +37,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify shock here (one at a time)
-specific_shock = ('e_z', 0.02) # Technology shock
-#specific_shock = ('e_beta', 0.02) # Discount factor shock
+#specific_shock = ('e_z', 0.02) # Technology shock
+specific_shock = ('e_beta', 0.02) # Discount factor shock
 #specific_shock = ('e_m', 0.02) # Monetary poilicy shock
 
 ###############################################################################
@@ -165,10 +165,10 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_agg_c.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_agg_c.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_agg_c.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_agg_c.svg")
 
 ###############################################################################
 
@@ -197,10 +197,10 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_agg_n.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_agg_n.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_agg_n.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_agg_n.svg")
 
 ###############################################################################
 
@@ -229,10 +229,10 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_infl.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_infl.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_infl.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_infl.svg")
 
 ###############################################################################
 
@@ -261,10 +261,10 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_wage.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_wage.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_wage.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_wage.svg")
 
 ###############################################################################
 
@@ -293,10 +293,10 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_interest.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_interest.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_interest.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_interest.svg")
 
 ###############################################################################
 
@@ -325,10 +325,10 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_output.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_output.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_output.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_output.svg")
 
 ###############################################################################
 ###############################################################################
@@ -360,10 +360,10 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_ind_c.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_ind_c.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_ind_c.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_ind_c.svg")
 
 ###############################################################################
 
@@ -392,7 +392,7 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/technology/technology_ind_n.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_ind_n.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/discount/discount_ind_n.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_ind_n.svg")

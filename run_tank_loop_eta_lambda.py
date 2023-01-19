@@ -35,8 +35,8 @@ impact = 1 # Choose time period of impact
 ###############################################################################
 
 # Specify shock here (one at a time)
-specific_shock = ('e_z', 0.02) # Technology shock
-#specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
+#specific_shock = ('e_z', 0.02) # Technology shock
+specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
 #specific_shock = ('e_m', 0.02) # Monetary poilicy shock
 
 ###############################################################################
@@ -45,7 +45,7 @@ specific_shock = ('e_z', 0.02) # Technology shock
 # Load models
 
 # Load baseline RANK model
-rank_model_loop = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_rank.yaml" # Set path here
+rank_model_loop = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_rank.yaml" # Set path here
 
 # Duplicate the RANK model
 rank_dictionary_0 = ep.parse(rank_model_loop)
@@ -54,7 +54,7 @@ rank_copy_eta = copy.deepcopy(rank_dictionary_0)
 ###############################################################################
 
 # Load baseline TANK model
-tank_model_loop = "/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/yaml/med_scale_tank.yaml" # Set path here
+tank_model_loop = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_tank.yaml" # Set path here
 
 # Duplicate the TANK model
 tank_dictionary_0 = ep.parse(tank_model_loop)
@@ -145,7 +145,7 @@ fig.show() # Display plot
 
 # Store plot
 if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/sensitivity/sensitivity_technology.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/sensitivity/sensitivity_technology.svg")
 
 if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/Uni Master WS22:23/RM Macro/Project/Plots/sensitivity/sensitivity_discount.svg")
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/sensitivity/sensitivity_discount.svg")
