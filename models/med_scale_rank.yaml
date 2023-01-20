@@ -2,8 +2,9 @@
 #
 # Description: a medium-scale representative-agent NK model (RANK) with
 # capital, capital adjustement costs, capital utilization costs and habits
-# The original model is by Gregor Boehl, PhD
-# This version of the model is by Andreas Koundouros [koundouros.andreas@gmail.com]
+# The original version of this model is by Gregor Boehl, PhD
+# This present version of the model is by Andreas Koundouros 
+# [koundouros.andreas@gmail.com]
 ---
 
 name: 'rank'
@@ -12,27 +13,28 @@ parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, 
 shocks: [e_beta, e_m, e_z]
 
 aux_equations: |
-    par_cap_util0 = MPKSS
+    par_cap_util0 = MPKSS # parameter on capital utilisation equal to steady
+                          # state marginal product of capital
 
 equations:
-      # households
+      # HOUSEHOLD BLOCK
     ~ w = chi*n**eta*(c - h*cLag)
     ~ 1 = R/piPrime*hhdf
     ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c)
     ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
 
-      # "banks"
+      # "BANKS" BLOCK
     ~ ds = qb*b + q*k
     ~ R = (1 + kappa*qbPrime)/qb
     ~ R = Rk
     ~ bprof = ((1+kappa*qb)*bLag + RkLag*qLag*kLag - RLag*ddLag)/pi
 
-      # government
+      # GOVERNMENT BLOCK
     ~ g + t + (1+kappa*qb)/pi*bLag = qb*b
     ~ g = 0.2*ySS
     ~ b = ySS/qbSS
 
-      # firms
+      # FIRMS BLOCK
     ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2
     ~ MPK = par_cap_util0 + par_cap_util1/(1-par_cap_util1)*(cap_util - 1)
     ~ MPK = z*alpha*mc*y/(cap_util*kLag)
@@ -42,7 +44,7 @@ equations:
     ~ pitilde = piSS**omega * pi**(1-omega)
     ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha)
 
-      # central bank
+      # MONETARY POLICY BLOCK
     ~ Rn = ((RSS*((pi/piSS)**phi_pi)*((y/ySS)**phi_y))**(1-rho)*RnLag**rho)*v # Taylor rule
     ~ R = max(1, Rn)
     
@@ -64,36 +66,36 @@ steady_state:
     fixed_values:
         # parameters:
         theta: 6. # elasticity of substitution
-        kappa: 0.975
-        psi: 59.11
-        delta: 0.025
-        alpha: 0.33
-        Phi: 5.6
-        phi_pi: 1.5
-        phi_y: 0.125
-        h: 0.44
-        rho: 0.8
-        eta: 1.
-        rho_beta: 0.8
-        par_cap_util1: 0.8
-        rho_m: 0.8
-        rho_z: 0.8
-        omega: 0.44
+        kappa: 0.975 # decay parameter for coupon payments of perpetual bonds
+        psi: 59.11 # parameter on the costs of price adjustment
+        delta: 0.025 # depreciation rate
+        alpha: 0.33 # capital income share
+        Phi: 5.6 # parameter on the costs of investment adjustment 
+        phi_pi: 1.5 # Taylor rule coefficient on inflation 
+        phi_y: 0.125 # Taylor rule coefficient on output
+        h: 0.44 # habit formation parameter
+        rho: 0.8 # persistence in (notional) nominal interest rate 
+        eta: 1. # inverse of Frisch elasticity of labour supply
+        rho_beta: 0.8 # persistence of discount factor shock
+        par_cap_util1: 0.8 # second parameter on the capital utilisation costs
+        rho_m: 0.8 # persistence of monetary policy shocks
+        rho_z: 0.8 # persistence of technology shocks
+        omega: 0.44 # coefficient on inflation target in inflation indexation
 
         # steady state
-        beta: 0.98
-        hhdf: beta
-        pi: 1.02^.25
-        R: pi/beta
-        Rn: R
-        Rk: R
-        n: 0.33
-        mc: (theta-1)/theta
-        q: 1.
-        v: 1.
-        z: 1.
-        pitilde: pi
-        cap_util: 1.
+        beta: 0.98 # steady state discount factor
+        hhdf: beta # steady state (unconstrained) households' discount factor
+        pi: 1.02^.25 # steady state inflation
+        R: pi/beta # steady state nominal interest rate
+        Rn: R # steady state notional nominal interest rate
+        Rk: R # steady state rental rate of capital
+        n: 0.33 # steady state labour hours
+        mc: (theta-1)/theta # steady state marginal costs
+        q: 1. # steady state value of capital in consumption units
+        v: 1. # steady state monetary policy shock
+        z: 1. # steady state technology
+        pitilde: pi # steady state price indexed inflation
+        cap_util: 1. # steady state capital utilisation share
 
     init_guesses:
         chi: 1e+1

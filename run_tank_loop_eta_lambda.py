@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan 10 15:48:13 2023
-
-@author: andreaskoundouros
+@author: Andreas Koundouros [koundouros.andreas@gmail.com]
 """
 
 ###############################################################################

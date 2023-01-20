@@ -3,7 +3,8 @@
 # Description: a medium-scale two-agent NK model (TANK) with
 # capital, capital adjustement costs, capital utilization costs and habits
 # The original RANK version of the model is by Gregor Boehl, PhD
-# The present version of the model is by Andreas Koundouros [koundouros.andreas@gmail.com]
+# The present version of the model is by Andreas Koundouros 
+# [koundouros.andreas@gmail.com]
 ---
 
 name: 'tank'
@@ -12,7 +13,8 @@ parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, 
 shocks: [e_beta, e_m, e_z]
 
 aux_equations: |
-    par_cap_util0 = MPKSS
+    par_cap_util0 = MPKSS # parameter on capital utilisation equal to steady
+                          # state marginal product of capital
 
 equations:
       # HOUSEHOLD BLOCK
@@ -103,7 +105,7 @@ steady_state:
         v: 1. # steady state monetary policy shock
         z: 1. # steady state technology
         pitilde: pi # steady state price indexed inflation
-        cap_util: 1.
+        cap_util: 1. # steady state capital utilisation share
 
     init_guesses:
         chi: 1e+1
