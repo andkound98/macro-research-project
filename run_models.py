@@ -8,7 +8,8 @@ Created on Thu Dec  8 14:27:44 2022
 
 ###############################################################################
 ###############################################################################
-# This script compares RANK and TANK after different shocks
+# This script compares non-linear medium-scale RANK and TANK modles after 
+# different shocks (a technology shock and a discount factor shock)
 ###############################################################################
 ###############################################################################
 
@@ -16,6 +17,7 @@ Created on Thu Dec  8 14:27:44 2022
 import econpizza as ep 
 import numpy as np
 import pandas as pd
+#from grgrlib import pplot # Import this for plotting all (!) variables
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
@@ -23,12 +25,12 @@ pio.renderers.default = "svg" # For plotting in the Spyder window
 ###############################################################################
 ###############################################################################
 
-# Load and solve RANK
+# Load RANK model and solve for its steady state
 rank = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_rank.yaml" # Set path here
 rank_mod = ep.load(rank)
 _ = rank_mod.solve_stst()
 
-# Load and solve TANK
+# Load TANK model and solve for its steady state
 tank = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_tank.yaml" # Set path here
 tank_mod = ep.load(tank)
 _ = tank_mod.solve_stst()
@@ -36,26 +38,27 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 ###############################################################################
 
-# Specify shock here (one at a time)
+# Specify the shock here (one at a time)
 #specific_shock = ('e_z', 0.02) # Technology shock
 specific_shock = ('e_beta', 0.02) # Discount factor shock
 
 ###############################################################################
 ###############################################################################
 
-# Find IRFs for RANK 
+# Find RANK IRFs to the specified shock
 rank_x, rank_flag = rank_mod.find_path(shock = specific_shock)
 
-# Find IRFs for TANK
+# Find TANK IRFs to the specified shock
 tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 
 ###############################################################################
 ###############################################################################
 
-# If desired, make plots for all variables
+# If desired, make plots for all (!) variables
 # Below, plots of key variables are created
 
-
+#pplot(rank_x, labels = rank_mod['variables']) # Plot IRFs of RANK
+#pplot(tank_x, labels = tank_mod['variables']) # Plot IRFs of TANK
 
 ###############################################################################
 ###############################################################################
@@ -68,6 +71,8 @@ varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'Rn', 'y', 'w'
 
 indx_rank = [rank_mod['variables'].index(v) for v in varlist_rank]
 indx_tank = [tank_mod['variables'].index(v) for v in varlist_tank]
+
+# Find indices
 
 # Consumption
 rank_c = indx_rank[0] # Aggregate consumption RANK
@@ -99,7 +104,11 @@ tank_y = indx_tank[9]
 
 ###############################################################################
 
-# Extract steady state values corresponding to the key variables
+# Extract steady state values corresponding to the key variables (note that
+# by construction, the last value of the IRFs is the steady state; 
+# alternatively, one could also use the very first value, but these are 
+# identical)
+
 # Consumption
 stst_rank_c = rank_x[-1,rank_c]
 stst_tank_c = tank_x[-1,tank_c]
@@ -133,7 +142,7 @@ stst_tank_y = tank_x[-1,tank_y]
 
 # Create data frame for plotting
 horizon = 50 # Time horizon
-time = list(range(0, horizon, 1)) # Create time variable
+time = list(range(0, horizon, 1)) # Time variable
 percent = 100 # Turn to 100 (1) if impulse response should (not) be in percent
 
 ###############################################################################
