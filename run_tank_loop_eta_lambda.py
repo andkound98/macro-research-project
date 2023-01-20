@@ -35,7 +35,6 @@ impact = 1 # Choose time period of impact
 # Specify shock here (one at a time)
 #specific_shock = ('e_z', 0.02) # Technology shock
 specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
-#specific_shock = ('e_m', 0.02) # Monetary poilicy shock
 
 ###############################################################################
 ###############################################################################
@@ -118,12 +117,10 @@ newnames = {'0.33':'0.33', '0.48': '0.48', '0.6299999999999999': '0.63',
             '0.7799999999999999': '0.78', '0.9299999999999999': '0.93', 
             '1.0': '1.0'} # Correct column names
 fig = px.line(impact_eta_lambda, markers = True, 
-              color_discrete_sequence=px.colors.qualitative.Plotly[:len(eta_sequence)],
-              # ['#636EFA', '#FFA15A', '#EF553B', '#00CC96', '#19D3F3', '#FECB52']
-              labels={'0.33': "hello"}) 
+              color_discrete_sequence=px.colors.qualitative.Plotly[:len(eta_sequence)]) 
 fig.update_yaxes(range=[-4, 0.]) # Fix range of y-axis
-fig.update_traces(line=dict(width=4), 
-                  marker=dict(size=12))
+fig.update_traces(line=dict(width=4),
+                  marker=dict(size=14))
 fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
                                       legendgroup = newnames[t.name],
                                       hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])))
@@ -132,16 +129,13 @@ fig.update_layout(title='', # Empty title
                    yaxis_title='Consumption Impact Rel. to RANK', # y-axis labeling
                    plot_bgcolor = 'whitesmoke', 
                    font=dict(size=20), 
-                   margin=dict(l=15, r=15, t=5, b=5), legend=dict(
-    orientation="h", # For horizontal legend
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None)
+                   margin=dict(l=15, r=15, t=5, b=5), 
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1, xanchor="right", x=1),
+                   legend_title='\u03B7')
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/sensitivity/sensitivity_technology.svg")
 

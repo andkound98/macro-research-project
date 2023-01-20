@@ -15,7 +15,7 @@
 import econpizza as ep 
 import numpy as np
 import pandas as pd
-#from grgrlib import pplot # Import this for plotting all (!) variables
+from grgrlib import pplot # Import this for plotting all (!) variables
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
@@ -55,8 +55,8 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 # If desired, make plots for all (!) variables
 # Below, plots of key variables are created
 
-#pplot(rank_x, labels = rank_mod['variables']) # Plot IRFs of RANK
-#pplot(tank_x, labels = tank_mod['variables']) # Plot IRFs of TANK
+#pplot(rank_x[0:60], labels = rank_mod['variables']) # Plot IRFs of RANK
+pplot(tank_x[0:60], labels = tank_mod['variables']) # Plot IRFs of TANK
 
 ###############################################################################
 ###############################################################################
@@ -149,8 +149,11 @@ percent = 100 # Turn to 100 (1) if impulse response should (not) be in percent
 # Aggregate Responses (for RANK vs TANK)
 
 # Aggregate Consumption 
-agg_consumption = np.column_stack([time, percent*((rank_x[:horizon,rank_c] - stst_rank_c)/stst_rank_c), percent*((tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c)]) # Concatenate data 
-agg_consumption = pd.DataFrame(agg_consumption, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
+agg_consumption = np.column_stack([time, 
+                                   percent*((rank_x[:horizon,rank_c] - stst_rank_c)/stst_rank_c), 
+                                   percent*((tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c)]) # Concatenate data 
+agg_consumption = pd.DataFrame(agg_consumption, 
+                               columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
 fig = px.line(agg_consumption, x = "Quarters", y = ['RANK', 'TANK'],
@@ -160,18 +163,14 @@ fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Consumption', # y-axis labeling
                    font=dict(size=20),
-                   legend=dict( # For horizontal legend
-    orientation="h",
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_agg_c.svg")
 
@@ -200,10 +199,10 @@ fig.update_layout(title='', # Empty title
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
 margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_agg_n.svg")
 
@@ -232,10 +231,10 @@ fig.update_layout(title='', # Empty title
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
 margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_infl.svg")
 
@@ -264,10 +263,10 @@ fig.update_layout(title='', # Empty title
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
 margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_wage.svg")
 
@@ -296,10 +295,10 @@ fig.update_layout(title='', # Empty title
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
 margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_interest.svg")
 
@@ -328,10 +327,10 @@ fig.update_layout(title='', # Empty title
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
 margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_output.svg")
 
@@ -363,10 +362,10 @@ fig.update_layout(title='', # Empty title
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
 margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_ind_c.svg")
 
@@ -395,10 +394,10 @@ fig.update_layout(title='', # Empty title
     x=1
 ), legend_title=None, plot_bgcolor = 'whitesmoke', 
 margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=4))
+fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
-# Store plot
+# Save plot as SVG
 if specific_shock[0] == 'e_z':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_ind_n.svg")
 
