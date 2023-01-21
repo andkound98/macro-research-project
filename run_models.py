@@ -15,7 +15,7 @@
 import econpizza as ep 
 import numpy as np
 import pandas as pd
-from grgrlib import pplot # Import this for plotting all (!) variables
+# from grgrlib import pplot # Import this for plotting all (!) variables
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
@@ -37,8 +37,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify the shock here (one at a time)
-#specific_shock = ('e_z', 0.02) # Technology shock
-specific_shock = ('e_beta', 0.02) # Discount factor shock
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock
 
 ###############################################################################
 ###############################################################################
@@ -53,10 +53,13 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 ###############################################################################
 
 # If desired, make plots for all (!) variables
-# Below, plots of key variables are created
 
-#pplot(rank_x[0:60], labels = rank_mod['variables']) # Plot IRFs of RANK
-pplot(tank_x[0:60], labels = tank_mod['variables']) # Plot IRFs of TANK
+horizon = 50 # Desired time horizon for the IRFs
+
+#pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
+#pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
+
+# Below, plots of key variables are created
 
 ###############################################################################
 ###############################################################################
@@ -138,8 +141,8 @@ stst_tank_y = tank_x[-1,tank_y]
 ###############################################################################
 ###############################################################################
 
-# Create data frame for plotting
-horizon = 50 # Time horizon
+# Preliminaries
+
 time = list(range(0, horizon, 1)) # Time variable
 percent = 100 # Turn to 100 (1) if impulse response should (not) be in percent
 
@@ -149,11 +152,11 @@ percent = 100 # Turn to 100 (1) if impulse response should (not) be in percent
 # Aggregate Responses (for RANK vs TANK)
 
 # Aggregate Consumption 
-agg_consumption = np.column_stack([time, 
+agg_consumption = np.column_stack([time, # Concatenate IRFs 
                                    percent*((rank_x[:horizon,rank_c] - stst_rank_c)/stst_rank_c), 
-                                   percent*((tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c)]) # Concatenate data 
-agg_consumption = pd.DataFrame(agg_consumption, 
-                               columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
+                                   percent*((tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c)])
+agg_consumption = pd.DataFrame(agg_consumption, # Turn data into data frame
+                               columns = ['Quarters', 'RANK', 'TANK'])
 
 # Plotting
 fig = px.line(agg_consumption, x = "Quarters", y = ['RANK', 'TANK'],
@@ -180,7 +183,9 @@ if specific_shock[0] == 'e_beta':
 ###############################################################################
 
 # Aggregate Labour Hours
-agg_labour = np.column_stack([time, percent*((rank_x[:horizon,rank_n] - stst_rank_n)/stst_rank_n), percent*((tank_x[:horizon,tank_n] - stst_tank_n)/stst_tank_n)]) # Concatenate data 
+agg_labour = np.column_stack([time, # Concatenate IRFs  
+                              percent*((rank_x[:horizon,rank_n] - stst_rank_n)/stst_rank_n), 
+                              percent*((tank_x[:horizon,tank_n] - stst_tank_n)/stst_tank_n)])
 agg_labour = pd.DataFrame(agg_labour, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
@@ -189,16 +194,12 @@ fig = px.line(agg_labour, x = "Quarters", y = ['RANK', 'TANK'],
                                   'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
-                   yaxis_title='Labour Hours', # y-axis labeling
+                   yaxis_title='Consumption', # y-axis labeling
                    font=dict(size=20),
-                   legend=dict(
-    orientation="h", # For horizontal legend
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
 fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
