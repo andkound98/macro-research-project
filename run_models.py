@@ -194,7 +194,7 @@ fig = px.line(agg_labour, x = "Quarters", y = ['RANK', 'TANK'],
                                   'TANK': '#FFA15A'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
-                   yaxis_title='Consumption', # y-axis labeling
+                   yaxis_title='Labour Hours', # y-axis labeling
                    font=dict(size=20),
                    legend=dict(orientation="h", # For horizontal legend
                                yanchor="bottom", y=1.02, xanchor="right", x=1), 
@@ -212,40 +212,10 @@ if specific_shock[0] == 'e_beta':
 
 ###############################################################################
 
-# Inflation 
-inflation = np.column_stack([time, percent*((rank_x[:horizon,rank_pi] - stst_rank_pi)/stst_rank_pi), percent*((tank_x[:horizon,tank_pi] - stst_tank_pi)/stst_tank_pi)])
-inflation = pd.DataFrame(inflation, columns = ['Quarters', 'RANK', 'TANK'])
-
-# Plotting
-fig = px.line(inflation, x = "Quarters", y = ['RANK', 'TANK'],
-              color_discrete_map={'RANK': '#636EFA', 
-                                  'TANK': '#FFA15A'})
-fig.update_layout(title='', # Empty title
-                   xaxis_title='Quarters', # x-axis labeling
-                   yaxis_title='Inflation', # y-axis labeling
-                   font=dict(size=20),
-                   legend=dict( 
-    orientation="h", # For horizontal legend
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=6))
-fig.show() # Display plot
-
-# Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_infl.svg")
-
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_infl.svg")
-
-###############################################################################
-
 # Wages
-wages = np.column_stack([time, percent*((rank_x[:horizon,rank_w] - stst_rank_w)/stst_rank_w), percent*((tank_x[:horizon,tank_w] - stst_tank_w)/stst_tank_w)])
+wages = np.column_stack([time, 
+                         percent*((rank_x[:horizon,rank_w] - stst_rank_w)/stst_rank_w), 
+                         percent*((tank_x[:horizon,tank_w] - stst_tank_w)/stst_tank_w)])
 wages = pd.DataFrame(wages, columns = ['Quarters', 'RANK', 'TANK'])
 
 # Plotting
@@ -256,14 +226,10 @@ fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Real Wage', # y-axis labeling
                    font=dict(size=20),
-                   legend=dict( 
-    orientation="h", # For horizontal legend
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
 fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
@@ -277,7 +243,9 @@ if specific_shock[0] == 'e_beta':
 ###############################################################################
 
 # Interest Rate
-interest = np.column_stack([time, percent*((rank_x[:horizon,rank_r] - stst_rank_r)/stst_rank_r), percent*((tank_x[:horizon,tank_r] - stst_tank_r)/stst_tank_r)]) # Concatenate data 
+interest = np.column_stack([time, 
+                            percent*((rank_x[:horizon,rank_r] - stst_rank_r)/stst_rank_r), 
+                            percent*((tank_x[:horizon,tank_r] - stst_tank_r)/stst_tank_r)]) # Concatenate data 
 interest = pd.DataFrame(interest, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
@@ -288,14 +256,10 @@ fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Nominal Interest Rate', # y-axis labeling
                    font=dict(size=20),
-                   legend=dict(
-    orientation="h", # For horizontal legend
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
 fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
@@ -309,7 +273,9 @@ if specific_shock[0] == 'e_beta':
 ###############################################################################
 
 # Ouptut
-output = np.column_stack([time, percent*((rank_x[:horizon,rank_y] - stst_rank_y)/stst_rank_y), percent*((tank_x[:horizon,tank_y] - stst_tank_y)/stst_tank_y)]) # Concatenate data 
+output = np.column_stack([time, 
+                          percent*((rank_x[:horizon,rank_y] - stst_rank_y)/stst_rank_y), 
+                          percent*((tank_x[:horizon,tank_y] - stst_tank_y)/stst_tank_y)]) # Concatenate data 
 output = pd.DataFrame(output, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
 
 # Plotting
@@ -320,14 +286,10 @@ fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Output', # y-axis labeling
                    font=dict(size=20),
-                   legend=dict(
-    orientation="h", # For horizontal legend
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
 fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
@@ -337,6 +299,36 @@ if specific_shock[0] == 'e_z':
 
 if specific_shock[0] == 'e_beta':
     fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_output.svg")
+    
+###############################################################################
+
+# Inflation 
+inflation = np.column_stack([time, 
+                             percent*((rank_x[:horizon,rank_pi] - stst_rank_pi)/stst_rank_pi), 
+                             percent*((tank_x[:horizon,tank_pi] - stst_tank_pi)/stst_tank_pi)])
+inflation = pd.DataFrame(inflation, columns = ['Quarters', 'RANK', 'TANK'])
+
+# Plotting
+fig = px.line(inflation, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
+fig.update_layout(title='', # Empty title
+                   xaxis_title='Quarters', # x-axis labeling
+                   yaxis_title='Inflation', # y-axis labeling
+                   font=dict(size=20),
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=6))
+fig.show() # Display plot
+
+# Save plot as SVG
+if specific_shock[0] == 'e_z':
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_infl.svg")
+
+if specific_shock[0] == 'e_beta':
+    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_infl.svg")
 
 ###############################################################################
 ###############################################################################
@@ -344,25 +336,23 @@ if specific_shock[0] == 'e_beta':
 # Individual-Level Responses (for TANK)
 
 # Consumption 
-consumption = np.column_stack([time, percent*((tank_x[:horizon,tank_chh] - stst_tank_chh)/stst_tank_chh), percent*((tank_x[:horizon,tank_cuu] - stst_tank_cuu)/stst_tank_cuu)]) # , (rank_x[:horizon,rank_c] - stst_rank_c)/stst_rank_c, (tank_x[:horizon,tank_c] - stst_tank_c)/stst_tank_c
-consumption = pd.DataFrame(consumption, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained']) # , 'RANK Consumption', 'TANK Consumption'
+consumption = np.column_stack([time, 
+                               percent*((tank_x[:horizon,tank_chh] - stst_tank_chh)/stst_tank_chh), 
+                               percent*((tank_x[:horizon,tank_cuu] - stst_tank_cuu)/stst_tank_cuu)]) 
+consumption = pd.DataFrame(consumption, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained']) 
 
 # Plotting
 fig = px.line(consumption, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
               color_discrete_map={'RANK Hand-to-Mouth': '#00CC96', 
-                                  'TANK Unconstrained': '#FF6692'}) # , 'RANK Consumption', 'TANK Consumption'
+                                  'TANK Unconstrained': '#FF6692'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Consumption', # y-axis labeling
                    font=dict(size=20),
-                   legend=dict( # For horizontal legend
-    orientation="h",
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
 fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
@@ -376,25 +366,23 @@ if specific_shock[0] == 'e_beta':
 ###############################################################################
 
 # Labour Hours
-labour = np.column_stack([time, percent*((tank_x[:horizon,tank_nhh] - stst_tank_nhh)/stst_tank_nhh), percent*((tank_x[:horizon,tank_nuu] - stst_tank_nuu)/stst_tank_nuu)]) # , (rank_x[:horizon,rank_n] - stst_rank_n)/stst_rank_n, (tank_x[:horizon,tank_n] - stst_tank_n)/stst_tank_n
-labour = pd.DataFrame(labour, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained']) # , 'RANK Labour', 'TANK Labour'
+labour = np.column_stack([time, 
+                          percent*((tank_x[:horizon,tank_nhh] - stst_tank_nhh)/stst_tank_nhh), 
+                          percent*((tank_x[:horizon,tank_nuu] - stst_tank_nuu)/stst_tank_nuu)]) 
+labour = pd.DataFrame(labour, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained'])
 
 # Plotting
 fig = px.line(labour, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
               color_discrete_map={'RANK Hand-to-Mouth': '#00CC96', 
-                                  'TANK Unconstrained': '#FF6692'}) # , 'RANK Labour', 'TANK Labour'
+                                  'TANK Unconstrained': '#FF6692'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Labour Hours', # y-axis labeling
                    font=dict(size=20),
-                   legend=dict(
-    orientation="h", # For horizontal legend
-    yanchor="bottom",
-    y=1.02,
-    xanchor="right",
-    x=1
-), legend_title=None, plot_bgcolor = 'whitesmoke', 
-margin=dict(l=15, r=15, t=5, b=5))
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
 fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 

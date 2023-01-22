@@ -27,14 +27,14 @@ pio.renderers.default = "svg" # For plotting in the Spyder window
 percent = 100 # Turn to 100 (1) if impact effect should (not) be in percent
 varlist_consumption = 'c' # Specify variable to be checked (here: aggregate 
                           # consumption)
-impact = 1 # Choose time period of impact
+impact = 1 # Time period of impact (if desired, another time period can be set)
 
 ###############################################################################
 ###############################################################################
 
 # Specify shock here (one at a time)
-#specific_shock = ('e_z', 0.02) # Technology shock
-specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
 
 ###############################################################################
 ###############################################################################
@@ -67,10 +67,12 @@ lambda_sequence = np.arange(0.1, 0.46, 0.05)
 
 # Sequence of eta values
 eta_sequence = np.arange(0.33, 1, 0.15)
-eta_sequence = np.append(eta_sequence, 1)
+eta_sequence = np.append(eta_sequence, 1) # Make sure 1 is included
 
 # Initialise empty container for impact values
-impact_eta_lambda = pd.DataFrame(np.nan, index = lambda_sequence, columns = eta_sequence)
+impact_eta_lambda = pd.DataFrame(np.nan, # Fill the data frame with NAs
+                                 index = lambda_sequence, 
+                                 columns = eta_sequence)
 
 ###############################################################################
 ###############################################################################
@@ -111,11 +113,12 @@ for ee in eta_sequence:
 ###############################################################################
 ###############################################################################
 
-# Plot the results
+# Plotting
 
 newnames = {'0.33':'0.33', '0.48': '0.48', '0.6299999999999999': '0.63', 
             '0.7799999999999999': '0.78', '0.9299999999999999': '0.93', 
             '1.0': '1.0'} # Correct column names
+
 fig = px.line(impact_eta_lambda, markers = True, 
               color_discrete_sequence=px.colors.qualitative.Plotly[:len(eta_sequence)]) 
 fig.update_yaxes(range=[-4, 0.]) # Fix range of y-axis
