@@ -12,16 +12,19 @@
 ###############################################################################
 
 # Import packages
+import os
 import econpizza as ep 
 import numpy as np
 import pandas as pd
-# from grgrlib import pplot # Import this for plotting all (!) variables
+from grgrlib import pplot # Import this for plotting all (!) variables
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
 
 ###############################################################################
 ###############################################################################
+
+rank_path = os.path.join("models", "med_scale_rank.yaml")
 
 # Load RANK model and solve for its steady state
 rank = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_rank.yaml" # Set path here
@@ -37,8 +40,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify the shock here (one at a time)
-#specific_shock = ('e_z', 0.02) # Technology shock
-specific_shock = ('e_beta', 0.02) # Discount factor shock
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock
 
 ###############################################################################
 ###############################################################################
@@ -56,8 +59,8 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 
 horizon = 50 # Desired time horizon for the IRFs
 
-#pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
-#pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
+pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
+pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
 
 # Below, plots of key variables are created
 

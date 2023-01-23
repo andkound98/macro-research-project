@@ -9,7 +9,7 @@
 
 name: 'tank'
 variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, chh, nhh, cuu, nuu, v, z, pitilde]
-parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, rho_beta, chi, par_cap_util1, lam, rho_m, rho_z, omega ]
+parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, chi, par_cap_util1, omega, lam, rho_z, rho_beta, rho_m ]
 shocks: [e_beta, e_m, e_z]
 
 aux_equations: |
