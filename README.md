@@ -7,3 +7,7 @@ This file implements the analyses of subsections 4.1 and 4.2. The code loads the
 
 ## `run_tank_loop_eta_lambda.py`
 This file conducts the analysis in subsection 4.3, which is a loop over the parameters $\lambda$ and $\eta$.
+
+---
+
+All codes were run with Python 3.9.12 and [`econpizza`](https://pypi.org/project/econpizza/) 0.4.1.
