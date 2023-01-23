@@ -37,8 +37,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify the shock here (one at a time)
-specific_shock = ('e_z', 0.02) # Technology shock
-#specific_shock = ('e_beta', 0.02) # Discount factor shock
+#specific_shock = ('e_z', 0.02) # Technology shock
+specific_shock = ('e_beta', 0.02) # Discount factor shock
 
 ###############################################################################
 ###############################################################################
@@ -336,15 +336,15 @@ if specific_shock[0] == 'e_beta':
 # Individual-Level Responses (for TANK)
 
 # Consumption 
-consumption = np.column_stack([time, 
+ind_consumption = np.column_stack([time, 
                                percent*((tank_x[:horizon,tank_chh] - stst_tank_chh)/stst_tank_chh), 
                                percent*((tank_x[:horizon,tank_cuu] - stst_tank_cuu)/stst_tank_cuu)]) 
-consumption = pd.DataFrame(consumption, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained']) 
+ind_consumption = pd.DataFrame(ind_consumption, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained']) 
 
 # Plotting
-fig = px.line(consumption, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
-              color_discrete_map={'RANK Hand-to-Mouth': '#00CC96', 
-                                  'TANK Unconstrained': '#FF6692'})
+fig = px.line(ind_consumption, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
+              color_discrete_map={'TANK Hand-to-Mouth': '#FF6692', 
+                                  'TANK Unconstrained': '#00CC96'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Consumption', # y-axis labeling
@@ -366,15 +366,15 @@ if specific_shock[0] == 'e_beta':
 ###############################################################################
 
 # Labour Hours
-labour = np.column_stack([time, 
+ind_labour = np.column_stack([time, 
                           percent*((tank_x[:horizon,tank_nhh] - stst_tank_nhh)/stst_tank_nhh), 
                           percent*((tank_x[:horizon,tank_nuu] - stst_tank_nuu)/stst_tank_nuu)]) 
-labour = pd.DataFrame(labour, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained'])
+ind_labour = pd.DataFrame(ind_labour, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained'])
 
 # Plotting
-fig = px.line(labour, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
-              color_discrete_map={'RANK Hand-to-Mouth': '#00CC96', 
-                                  'TANK Unconstrained': '#FF6692'})
+fig = px.line(ind_labour, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
+              color_discrete_map={'TANK Hand-to-Mouth': '#FF6692',
+                                  'TANK Unconstrained': '#00CC96'})
 fig.update_layout(title='', # Empty title
                    xaxis_title='Quarters', # x-axis labeling
                    yaxis_title='Labour Hours', # y-axis labeling
