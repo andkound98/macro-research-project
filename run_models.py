@@ -16,7 +16,7 @@ import os
 import econpizza as ep 
 import numpy as np
 import pandas as pd
-from grgrlib import pplot # Import this for plotting all (!) variables
+#from grgrlib import pplot # Import this for plotting all (!) variables
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
@@ -24,15 +24,22 @@ pio.renderers.default = "svg" # For plotting in the Spyder window
 ###############################################################################
 ###############################################################################
 
-rank_path = os.path.join("models", "med_scale_rank.yaml")
+# Set working directory accordingly
+absolute_path = os.getcwd()
 
-# Load RANK model and solve for its steady state
-rank = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_rank.yaml" # Set path here
+# Set path for RANK model, load the model and solve for its steady state
+relative_path_rank = os.path.join("models", "med_scale_rank.yaml")
+full_path_rank = os.path.join(absolute_path, relative_path_rank)
+
+rank = full_path_rank
 rank_mod = ep.load(rank)
 _ = rank_mod.solve_stst()
 
-# Load TANK model and solve for its steady state
-tank = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_tank.yaml" # Set path here
+# Set path for TANK model, load the model and solve for its steady state
+relative_path_tank = os.path.join("models", "med_scale_tank.yaml")
+full_path_tank = os.path.join(absolute_path, relative_path_tank)
+
+tank = full_path_tank
 tank_mod = ep.load(tank)
 _ = tank_mod.solve_stst()
 
@@ -59,8 +66,8 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 
 horizon = 50 # Desired time horizon for the IRFs
 
-pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
-pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
+# pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
+# pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
 
 # Below, plots of key variables are created
 
