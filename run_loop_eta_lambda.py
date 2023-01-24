@@ -6,12 +6,13 @@
 
 ###############################################################################
 ###############################################################################
-# This script loops over the parameter values of eta and lambda in RANK and 
-# TANK (lambda only in TANK)
+# This script loops over the parameter values of eta and lambda in the RANK and 
+# TANK models (lambda only in TANK)
 ###############################################################################
 ###############################################################################
 
 # Import packages
+import os
 import econpizza as ep
 import numpy as np
 import pandas as pd
@@ -19,6 +20,8 @@ import copy
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
+
+save_plot_yes = True # If true, it saves the plots after creating them
 
 ###############################################################################
 ###############################################################################
@@ -33,25 +36,34 @@ impact = 1 # Time period of impact (if desired, another time period can be set)
 ###############################################################################
 
 # Specify shock here (one at a time)
-specific_shock = ('e_z', 0.02) # Technology shock
-#specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
+#specific_shock = ('e_z', 0.02) # Technology shock
+specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
 
 ###############################################################################
 ###############################################################################
 
-# Load models
+# Load and duplicate models
+
+# Set working directory accordingly
+absolute_path = os.getcwd()
+
+# Set path for RANK model, load the model and solve for its steady state
+relative_path_rank = os.path.join("models", "med_scale_rank.yaml")
+full_path_rank = os.path.join(absolute_path, relative_path_rank)
 
 # Load baseline RANK model
-rank_model_loop = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_rank.yaml" # Set path here
+rank_model_loop = full_path_rank 
 
 # Duplicate the RANK model
 rank_dictionary_0 = ep.parse(rank_model_loop)
 rank_copy_eta = copy.deepcopy(rank_dictionary_0)
 
-###############################################################################
+# Set path for TANK model, load the model and solve for its steady state
+relative_path_tank = os.path.join("models", "med_scale_tank.yaml")
+full_path_tank = os.path.join(absolute_path, relative_path_tank)
 
 # Load baseline TANK model
-tank_model_loop = "/Users/andreaskoundouros/Documents/macro-research-project/models/med_scale_tank.yaml" # Set path here
+tank_model_loop = full_path_tank
 
 # Duplicate the TANK model
 tank_dictionary_0 = ep.parse(tank_model_loop)
@@ -126,7 +138,8 @@ fig.update_traces(line=dict(width=4),
                   marker=dict(size=14))
 fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
                                       legendgroup = newnames[t.name],
-                                      hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])))
+                                      hovertemplate = t.hovertemplate.replace(t.name, 
+                                                                              newnames[t.name])))
 fig.update_layout(title='', # Empty title
                    xaxis_title="\u03BB", # x-axis labeling
                    yaxis_title='Consumption Impact Rel. to RANK', # y-axis labeling
@@ -138,9 +151,19 @@ fig.update_layout(title='', # Empty title
                    legend_title='\u03B7')
 fig.show() # Display plot
 
-# Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/sensitivity/sensitivity_technology.svg")
+###############################################################################
+###############################################################################
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/sensitivity/sensitivity_discount.svg")
+# Save plot as SVG
+relative_path_plots = os.path.join("plots", "sensitivity")
+full_path_plots = os.path.join(absolute_path, relative_path_plots)
+
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_sensitivity_technology = os.path.join(full_path_plots, 
+                                                          "sensitivity_technology.svg")
+    fig.write_image(full_path_plots_sensitivity_technology)
+
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_sensitivity_discount = os.path.join(full_path_plots, 
+                                                        "sensitivity_discount.svg")
+    fig.write_image(full_path_plots_sensitivity_discount)
