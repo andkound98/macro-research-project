@@ -21,6 +21,8 @@ import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
 
+save_plot_yes = True # If true, it saves the plots after creating them
+
 ###############################################################################
 ###############################################################################
 
@@ -66,8 +68,8 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 
 horizon = 50 # Desired time horizon for the IRFs
 
-# pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
-# pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
+#pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
+#pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
 
 # Below, plots of key variables are created
 
@@ -77,8 +79,8 @@ horizon = 50 # Desired time horizon for the IRFs
 # Preparations for plots of key variables 
 
 # Extract key variables
-varlist_rank = 'c', 'n', 'pi', 'R', 'Rn', 'y', 'w'
-varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'Rn', 'y', 'w'
+varlist_rank = 'c', 'n', 'pi', 'R', 'Rn', 'y', 'w', 'i', 'mc'
+varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'Rn', 'y', 'w', 'i', 'mc'
 
 indx_rank = [rank_mod['variables'].index(v) for v in varlist_rank]
 indx_tank = [tank_mod['variables'].index(v) for v in varlist_tank]
@@ -112,6 +114,14 @@ tank_r = indx_tank[7]
 # Output 
 rank_y = indx_rank[5]
 tank_y = indx_tank[9]
+
+# Investment 
+rank_inv = indx_rank[7]
+tank_inv = indx_tank[11]
+
+# Marginal Costs
+rank_mc = indx_rank[8]
+tank_mc = indx_tank[12]
 
 ###############################################################################
 
@@ -148,6 +158,14 @@ stst_tank_r = tank_x[-1,tank_r]
 stst_rank_y = rank_x[-1,rank_y]
 stst_tank_y = tank_x[-1,tank_y]
 
+# Investment 
+stst_rank_inv = rank_x[-1,rank_inv]
+stst_tank_inv = tank_x[-1,tank_inv]
+
+# Marginal Costs
+stst_rank_mc = rank_x[-1,rank_mc]
+stst_tank_mc = tank_x[-1,tank_mc]
+
 ###############################################################################
 ###############################################################################
 
@@ -155,6 +173,15 @@ stst_tank_y = tank_x[-1,tank_y]
 
 time = list(range(0, horizon, 1)) # Time variable
 percent = 100 # Turn to 100 (1) if impulse response should (not) be in percent
+
+# Setting paths in case plots should be created 
+relative_path_plots_technology = os.path.join("plots", "technology")
+full_path_plots_technology = os.path.join(absolute_path, 
+                                          relative_path_plots_technology) 
+
+relative_path_plots_discount = os.path.join("plots", "discount")
+full_path_plots_discount = os.path.join(absolute_path, 
+                                        relative_path_plots_discount) 
 
 ###############################################################################
 ###############################################################################
@@ -184,11 +211,15 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_agg_c.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_agg_c = os.path.join(full_path_plots_technology, 
+                                                    "technology_agg_c.svg")
+    fig.write_image(full_path_plots_technology_agg_c)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_agg_c.svg")
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_agg_c = os.path.join(full_path_plots_discount, 
+                                                  "discount_agg_c.svg")
+    fig.write_image(full_path_plots_discount_agg_c)
 
 ###############################################################################
 
@@ -196,7 +227,7 @@ if specific_shock[0] == 'e_beta':
 agg_labour = np.column_stack([time, # Concatenate IRFs  
                               percent*((rank_x[:horizon,rank_n] - stst_rank_n)/stst_rank_n), 
                               percent*((tank_x[:horizon,tank_n] - stst_tank_n)/stst_tank_n)])
-agg_labour = pd.DataFrame(agg_labour, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
+agg_labour = pd.DataFrame(agg_labour, columns = ['Quarters', 'RANK', 'TANK'])
 
 # Plotting
 fig = px.line(agg_labour, x = "Quarters", y = ['RANK', 'TANK'],
@@ -214,12 +245,16 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_agg_n.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_agg_n = os.path.join(full_path_plots_technology, 
+                                                    "technology_agg_n.svg")
+    fig.write_image(full_path_plots_technology_agg_n)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_agg_n.svg")
-
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_agg_n = os.path.join(full_path_plots_discount, 
+                                                  "discount_agg_n.svg")
+    fig.write_image(full_path_plots_discount_agg_n)
+    
 ###############################################################################
 
 # Wages
@@ -244,19 +279,23 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_wage.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_wage = os.path.join(full_path_plots_technology, 
+                                                   "technology_wage.svg")
+    fig.write_image(full_path_plots_technology_wage)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_wage.svg")
-
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_wage = os.path.join(full_path_plots_discount, 
+                                                 "discount_wage.svg")
+    fig.write_image(full_path_plots_discount_wage)
+    
 ###############################################################################
 
 # Interest Rate
 interest = np.column_stack([time, 
                             percent*((rank_x[:horizon,rank_r] - stst_rank_r)/stst_rank_r), 
-                            percent*((tank_x[:horizon,tank_r] - stst_tank_r)/stst_tank_r)]) # Concatenate data 
-interest = pd.DataFrame(interest, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
+                            percent*((tank_x[:horizon,tank_r] - stst_tank_r)/stst_tank_r)]) 
+interest = pd.DataFrame(interest, columns = ['Quarters', 'RANK', 'TANK']) 
 
 # Plotting
 fig = px.line(interest, x = "Quarters", y = ['RANK', 'TANK'],
@@ -274,19 +313,23 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_interest.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_interest = os.path.join(full_path_plots_technology, 
+                                                       "technology_interest.svg")
+    fig.write_image(full_path_plots_technology_interest)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_interest.svg")
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_interest = os.path.join(full_path_plots_discount, 
+                                                     "discount_interest.svg")
+    fig.write_image(full_path_plots_discount_interest)
 
 ###############################################################################
 
 # Ouptut
 output = np.column_stack([time, 
                           percent*((rank_x[:horizon,rank_y] - stst_rank_y)/stst_rank_y), 
-                          percent*((tank_x[:horizon,tank_y] - stst_tank_y)/stst_tank_y)]) # Concatenate data 
-output = pd.DataFrame(output, columns = ['Quarters', 'RANK', 'TANK']) # Turn data into data frame
+                          percent*((tank_x[:horizon,tank_y] - stst_tank_y)/stst_tank_y)]) 
+output = pd.DataFrame(output, columns = ['Quarters', 'RANK', 'TANK']) 
 
 # Plotting
 fig = px.line(output, x = "Quarters", y = ['RANK', 'TANK'],
@@ -304,12 +347,16 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_output.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_output = os.path.join(full_path_plots_technology, 
+                                                     "technology_output.svg")
+    fig.write_image(full_path_plots_technology_output)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_output.svg")
-    
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_output = os.path.join(full_path_plots_discount, 
+                                                   "discount_output.svg")
+    fig.write_image(full_path_plots_discount_output)
+
 ###############################################################################
 
 # Inflation 
@@ -334,11 +381,83 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_infl.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_infl = os.path.join(full_path_plots_technology, 
+                                                   "technology_infl.svg")
+    fig.write_image(full_path_plots_technology_infl)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_infl.svg")
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_infl = os.path.join(full_path_plots_discount, 
+                                                 "discount_infl.svg")
+    fig.write_image(full_path_plots_discount_infl)
+
+###############################################################################
+
+# Investment
+investment = np.column_stack([time, 
+                             percent*((rank_x[:horizon,rank_inv] - stst_rank_inv)/stst_rank_inv), 
+                             percent*((tank_x[:horizon,tank_inv] - stst_tank_inv)/stst_tank_inv)])
+investment = pd.DataFrame(investment, columns = ['Quarters', 'RANK', 'TANK'])
+
+# Plotting
+fig = px.line(investment, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
+fig.update_layout(title='', # Empty title
+                   xaxis_title='Quarters', # x-axis labeling
+                   yaxis_title='Investment', # y-axis labeling
+                   font=dict(size=20),
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=6))
+fig.show() # Display plot
+
+# Save plot as SVG
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_inv = os.path.join(full_path_plots_technology, 
+                                                   "technology_inv.svg")
+    fig.write_image(full_path_plots_technology_inv)
+
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_inv = os.path.join(full_path_plots_discount, 
+                                                 "discount_inv.svg")
+    fig.write_image(full_path_plots_discount_inv)
+    
+###############################################################################    
+
+# Marginal Costs
+mc = np.column_stack([time, 
+                      percent*((rank_x[:horizon,rank_mc] - stst_rank_mc)/stst_rank_mc), 
+                      percent*((tank_x[:horizon,tank_mc] - stst_tank_mc)/stst_tank_mc)])
+mc = pd.DataFrame(mc, columns = ['Quarters', 'RANK', 'TANK'])
+
+# Plotting
+fig = px.line(mc, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
+fig.update_layout(title='', # Empty title
+                   xaxis_title='Quarters', # x-axis labeling
+                   yaxis_title='Marginal Costs', # y-axis labeling
+                   font=dict(size=20),
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=6))
+fig.show() # Display plot
+
+# Save plot as SVG
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_mc = os.path.join(full_path_plots_technology, 
+                                                   "technology_mc.svg")
+    fig.write_image(full_path_plots_technology_mc)
+
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_mc = os.path.join(full_path_plots_discount, 
+                                                 "discount_mc.svg")
+    fig.write_image(full_path_plots_discount_mc)
 
 ###############################################################################
 ###############################################################################
@@ -349,10 +468,12 @@ if specific_shock[0] == 'e_beta':
 ind_consumption = np.column_stack([time, 
                                percent*((tank_x[:horizon,tank_chh] - stst_tank_chh)/stst_tank_chh), 
                                percent*((tank_x[:horizon,tank_cuu] - stst_tank_cuu)/stst_tank_cuu)]) 
-ind_consumption = pd.DataFrame(ind_consumption, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained']) 
+ind_consumption = pd.DataFrame(ind_consumption, 
+                               columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained']) 
 
 # Plotting
-fig = px.line(ind_consumption, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
+fig = px.line(ind_consumption, x = "Quarters", 
+              y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
               color_discrete_map={'TANK Hand-to-Mouth': '#FF6692', 
                                   'TANK Unconstrained': '#00CC96'})
 fig.update_layout(title='', # Empty title
@@ -367,22 +488,28 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_ind_c.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_ind_c = os.path.join(full_path_plots_technology, 
+                                                    "technology_ind_c.svg")
+    fig.write_image(full_path_plots_technology_ind_c)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_ind_c.svg")
-
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_ind_c = os.path.join(full_path_plots_discount, 
+                                                  "discount_ind_c.svg")
+    fig.write_image(full_path_plots_discount_ind_c)
+    
 ###############################################################################
 
 # Labour Hours
 ind_labour = np.column_stack([time, 
                           percent*((tank_x[:horizon,tank_nhh] - stst_tank_nhh)/stst_tank_nhh), 
                           percent*((tank_x[:horizon,tank_nuu] - stst_tank_nuu)/stst_tank_nuu)]) 
-ind_labour = pd.DataFrame(ind_labour, columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained'])
+ind_labour = pd.DataFrame(ind_labour, 
+                          columns = ['Quarters', 'TANK Hand-to-Mouth', 'TANK Unconstrained'])
 
 # Plotting
-fig = px.line(ind_labour, x = "Quarters", y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
+fig = px.line(ind_labour, x = "Quarters", 
+              y = ['TANK Hand-to-Mouth', 'TANK Unconstrained'],
               color_discrete_map={'TANK Hand-to-Mouth': '#FF6692',
                                   'TANK Unconstrained': '#00CC96'})
 fig.update_layout(title='', # Empty title
@@ -397,8 +524,12 @@ fig.update_traces(line=dict(width=6))
 fig.show() # Display plot
 
 # Save plot as SVG
-if specific_shock[0] == 'e_z':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/technology/technology_ind_n.svg")
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_ind_n = os.path.join(full_path_plots_technology, 
+                                                    "technology_ind_n.svg")
+    fig.write_image(full_path_plots_technology_ind_n)
 
-if specific_shock[0] == 'e_beta':
-    fig.write_image("/Users/andreaskoundouros/Documents/macro-research-project/plots/discount/discount_ind_n.svg")
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_ind_n = os.path.join(full_path_plots_discount, 
+                                                  "discount_ind_n.svg")
+    fig.write_image(full_path_plots_discount_ind_n)
