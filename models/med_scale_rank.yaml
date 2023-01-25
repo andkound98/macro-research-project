@@ -37,9 +37,9 @@ equations:
       # FIRMS BLOCK
     ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2
     ~ MPK = par_cap_util0 + par_cap_util1/(1-par_cap_util1)*(cap_util - 1)
-    ~ MPK = z*alpha*mc*y/(cap_util*kLag)
+    ~ MPK = alpha*mc*y/(cap_util*kLag)
     ~ q*Rk/piPrime = MPKPrime*cap_utilPrime + (1-delta)*qPrime - cap_util_costs
-    ~ w = z*(1-alpha)*mc*y/n
+    ~ w = (1-alpha)*mc*y/n
     ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y
     ~ pitilde = piSS**omega * pi**(1-omega)
     ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha)
@@ -72,7 +72,7 @@ steady_state:
         alpha: 0.33 # capital income share
         Phi: 5.6 # parameter on the costs of investment adjustment 
         phi_pi: 1.5 # Taylor rule coefficient on inflation 
-        phi_y: 0.125 # Taylor rule coefficient on output
+        phi_y: 0.1 # Taylor rule coefficient on output
         h: 0.44 # habit formation parameter
         rho: 0.8 # persistence in (notional) nominal interest rate 
         eta: 1. # inverse of Frisch elasticity of labour supply
