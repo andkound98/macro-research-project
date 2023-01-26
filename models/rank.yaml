@@ -1,0 +1,100 @@
+# rank.yaml ---
+#
+# Description: a medium-scale representative-agent NK model (RANK) with
+# capital, capital adjustement costs, capital utilization costs and habits
+# The original version of this model is by Gregor Boehl, PhD
+# This present version of the model is by Andreas Koundouros 
+# [koundouros.andreas@gmail.com]
+---
+
+name: 'rank'
+variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, z, pitilde, RR]
+parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, chi, par_cap_util1, omega, rho_z, rho_beta ]
+shocks: [e_beta, e_z]
+
+aux_equations: |
+    par_cap_util0 = MPKSS # parameter on capital utilisation equal to steady
+                          # state marginal product of capital
+
+equations:
+      # HOUSEHOLD BLOCK
+    ~ w = chi*n**eta*(c - h*cLag)
+    ~ 1 = RR*hhdf
+    ~ RR = R/piPrime # real interest rate
+    ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c)
+    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
+
+      # "BANKS" BLOCK
+    ~ ds = qb*b + q*k
+    ~ R = (1 + kappa*qbPrime)/qb
+    ~ R = Rk
+    ~ bprof = ((1+kappa*qb)*bLag + RkLag*qLag*kLag - RLag*ddLag)/pi
+
+      # GOVERNMENT BLOCK
+    ~ g + (1+kappa*qb)/pi*bLag = qb*b + t
+    ~ g = 0.2*ySS
+    ~ b = ySS/qbSS
+
+      # FIRMS BLOCK
+    ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2
+    ~ MPK = par_cap_util0 + par_cap_util1/(1-par_cap_util1)*(cap_util - 1)
+    ~ MPK = alpha*mc*y/(cap_util*kLag)
+    ~ q*Rk/piPrime = MPKPrime*cap_utilPrime + (1-delta)*qPrime - cap_util_costs
+    ~ w = (1-alpha)*mc*y/n
+    ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y
+    ~ pitilde = piSS**omega * pi**(1-omega)
+    ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha)
+
+      # MONETARY POLICY BLOCK
+    ~ Rn = ((RSS*((pi/piSS)**phi_pi)*((y/ySS)**phi_y))**(1-rho)*RnLag**rho) # Taylor rule for the notional nominal interest rate
+    ~ R = max(1, Rn) # (actual) nominal interest rate, subject to ZLB
+    
+      # FURTHER EQUATIONS
+      # clearing conditions
+    ~ c + i + g + Phi/2*(i/iLag - 1)**2*i + cap_util_costs*kLag = (1-psi*(pi/pitildeLag - 1)**2/2)*y_prod # goods market clearing
+    ~ c + i + g = y # definition of "effective" output
+  
+      # capital
+    ~ 1 = q*(1 - Phi/2*(i/iLag - 1)**2 - Phi*(i/iLag - 1)*i/iLag) + hhdf*qPrime*Phi*(iPrime/i - 1)*(iPrime/i)**2 # investment Euler equation
+    ~ k = (1-delta)*kLag + (1 - Phi/2*(i/iLag - 1)**2)*i # law of motion for capital
+    
+      # exogenous processes
+    ~ z = zSS*(zLag/zSS)**rho_z*exp(e_z) # technology shock
+    ~ beta = betaSS*(betaLag/betaSS)**rho_beta*exp(e_beta) # discount factor shock
+
+steady_state:
+    fixed_values:
+        # parameters:
+        theta: 6. # elasticity of substitution
+        kappa: 0.975 # decay parameter for coupon payments of perpetual bonds
+        psi: 59.11 # parameter on the costs of price adjustment
+        delta: 0.025 # depreciation rate
+        alpha: 0.33 # capital income share
+        Phi: 5.6 # parameter on the costs of investment adjustment 
+        phi_pi: 1.5 # Taylor rule coefficient on inflation 
+        phi_y: 0.1 # Taylor rule coefficient on output
+        h: 0.44 # habit formation parameter
+        rho: 0.8 # persistence in (notional) nominal interest rate 
+        eta: 1. # inverse of Frisch elasticity of labour supply
+        rho_beta: 0.8 # persistence of discount factor shock
+        par_cap_util1: 0.8 # second parameter on the capital utilisation costs
+        rho_z: 0.8 # persistence of technology shocks
+        omega: 0.44 # coefficient on inflation target in inflation indexation
+
+        # steady state
+        beta: 0.98 # steady state discount factor
+        hhdf: beta # steady state (unconstrained) households' discount factor
+        pi: 1.02^.25 # steady state inflation
+        R: pi/beta # steady state nominal interest rate
+        Rn: R # steady state notional nominal interest rate
+        Rk: R # steady state rental rate of capital
+        n: 0.33 # steady state labour hours
+        mc: (theta-1)/theta # steady state marginal costs
+        q: 1. # steady state value of capital in consumption units
+        z: 1. # steady state technology
+        pitilde: pi # steady state price indexed inflation
+        cap_util: 1. # steady state capital utilisation share
+
+    init_guesses:
+        chi: 1e+1
+        MPK: alpha*mc/20
