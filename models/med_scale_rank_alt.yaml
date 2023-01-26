@@ -1,15 +1,15 @@
-# med_scale_tank.yaml ---
+# med_scale_rank.yaml ---
 #
-# Description: a medium-scale two-agent NK model (TANK) with
+# Description: a medium-scale representative-agent NK model (RANK) with
 # capital, capital adjustement costs, capital utilization costs and habits
-# The original RANK version of the model is by Gregor Boehl, PhD
-# The present version of the model is by Andreas Koundouros 
+# The original version of this model is by Gregor Boehl, PhD
+# This present version of the model is by Andreas Koundouros 
 # [koundouros.andreas@gmail.com]
 ---
 
-name: 'tank'
-variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, chh, nhh, cuu, nuu, z, pitilde]
-parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, chi, par_cap_util1, omega, lam, rho_z, rho_beta ]
+name: 'rank'
+variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, pitilde, z]
+parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, chi, par_cap_util1, omega, rho_z, rho_beta]
 shocks: [e_beta, e_z]
 
 aux_equations: |
@@ -18,19 +18,10 @@ aux_equations: |
 
 equations:
       # HOUSEHOLD BLOCK
-      # unconstrained households
-    ~ w = chi*nuu**eta*(cuu - h*cLag) # labour supply
+    ~ w = chi*n**eta*(c - h*cLag) # labour supply
     ~ 1 = R/piPrime*hhdf # Euler equation
-    ~ hhdf = betaPrime*(cuu - h*cLag)/(cuuPrime - h*c) # (stochastic) discount factor
-    ~ dd + cuu + t + Phi/2*(i/iLag - 1)**2*i = w*nuu + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y_prod + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof # budget constraint
-    
-     # hand-to-mouth households
-    ~ w = chi*nhh**eta*(chh - h*cLag) # labour supply 
-    ~ chh = w*nhh # budget constraint
-    
-     # aggregation
-    ~ c = (1-lam)*cuu + lam*chh # aggregate consumption
-    ~ n = (1-lam)*nuu + lam*nhh # aggregate labour hours
+    ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c) # (stochastic) discount factor
+    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y_prod + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof # budget constraint
 
       # "BANKS" BLOCK
     ~ ds = qb*b + q*k # supply of "bank" deposits, i.e. the "banks" balance sheet
@@ -89,7 +80,6 @@ steady_state:
         rho_m: 0.8 # persistence of monetary policy shocks
         rho_z: 0.8 # persistence of technology shocks
         omega: 0.44 # coefficient on inflation target in inflation indexation
-        lam: 0.3 # fraction of hand-to-mouth agents
 
         # steady state
         beta: 0.97 # steady state discount factor
@@ -108,77 +98,3 @@ steady_state:
     init_guesses:
         chi: 1e+1
         MPK: alpha*mc/20
-
-# steady_state:
-#     fixed_values:
-#         # parameters:
-#         theta: 6. # elasticity of substitution
-#         kappa: 0.975 # decay parameter for coupon payments of perpetual bonds
-#         psi: 59.11 # parameter on the costs of price adjustment
-#         delta: 0.025 # depreciation rate
-#         alpha: 0.33 # capital income share
-#         Phi: 5.6 # parameter on the costs of investment adjustment 
-#         phi_pi: 1.5 # Taylor rule coefficient on inflation 
-#         phi_y: 0.1 # Taylor rule coefficient on output
-#         h: 0.44 # habit formation parameter
-#         rho: 0.8 # persistence in (notional) nominal interest rate 
-#         eta: .33 # inverse of Frisch elasticity of labour supply
-#         rho_beta: 0.8 # persistence of discount factor shock
-#         par_cap_util1: 0.8 # second parameter on the capital utilisation costs
-#         rho_z: 0.8 # persistence of technology shocks
-#         omega: 0.44 # coefficient on inflation target in inflation indexation
-#         lam: 0.3
-
-#         # steady state
-#         beta: 0.95 # steady state discount factor
-#         hhdf: beta # steady state (unconstrained) households' discount factor
-#         pi: 1.02^.25 # steady state inflation
-#         R: pi/beta # steady state nominal interest rate
-#         Rn: R # steady state notional nominal interest rate
-#         Rk: R # steady state rental rate of capital
-#         nuu: 0.33 # steady state labour hours of unconstrained households
-#         mc: (theta-1)/theta # steady state marginal costs
-#         q: 1. # steady state value of capital in consumption units
-#         #z: 1. # steady state technology
-#         pitilde: pi # steady state price indexed inflation
-#         cap_util: 1. # steady state capital utilisation share
-
-#     init_guesses:
-#         chi: 1e+1
-#         MPK: alpha*mc/20
-
-# steady_state:
-#     fixed_values:
-#         # parameters:
-#         theta: 6.
-#         kappa: 0.975
-#         psi: 59.11
-#         delta: 0.025
-#         alpha: 0.33
-#         Phi: 5.6
-#         phi_pi: 1.5
-#         phi_y: 0.1
-#         h: .44
-#         rho: .8
-#         eta: .33
-#         rho_beta: .8
-#         par_cap_util1: 0.8
-#         omega: .44
-#         rho_z: 0.8
-#         lam: .3
-
-#         # steady state
-#         beta: 0.98
-#         pi: 1.02^.25
-#         R: pi/beta # steady state nominal interest rate
-#         nuu: 0.33
-#         z: 1.
-#         mc: (theta-1)/theta
-#         q: 1.
-#         pitilde: pi
-#         cap_util: 1. # steady state capital utilisation share
-
-#     init_guesses:
-#         chi: 1e+1
-#         MPK: alpha*mc/20
-

@@ -21,7 +21,7 @@ equations:
     ~ w = chi*n**eta*(c - h*cLag)
     ~ 1 = R/piPrime*hhdf
     ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c)
-    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
+    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y_prod + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
 
       # "BANKS" BLOCK
     ~ ds = qb*b + q*k
@@ -37,10 +37,10 @@ equations:
       # FIRMS BLOCK
     ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2
     ~ MPK = par_cap_util0 + par_cap_util1/(1-par_cap_util1)*(cap_util - 1)
-    ~ MPK = alpha*mc*y/(cap_util*kLag)
+    ~ MPK = alpha*mc*y_prod/(cap_util*kLag)
     ~ q*Rk/piPrime = MPKPrime*cap_utilPrime + (1-delta)*qPrime - cap_util_costs
-    ~ w = (1-alpha)*mc*y/n
-    ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y
+    ~ w = (1-alpha)*mc*y_prod/n
+    ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*y_prodPrime/y_prod
     ~ pitilde = piSS**omega * pi**(1-omega)
     ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha)
 
