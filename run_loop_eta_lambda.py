@@ -21,7 +21,7 @@ import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
 
-save_plot_yes = True # If true, it saves the plots after creating them
+save_plot_yes = False # If true, it saves the plots after creating them
 
 ###############################################################################
 ###############################################################################
@@ -36,8 +36,8 @@ impact = 1 # Time period of impact (if desired, another time period can be set)
 ###############################################################################
 
 # Specify shock here (one at a time)
-#specific_shock = ('e_z', 0.02) # Technology shock
-specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
 
 ###############################################################################
 ###############################################################################
@@ -48,7 +48,7 @@ specific_shock = ('e_beta', 0.02) # Discount factor shock # 0.198
 absolute_path = os.getcwd()
 
 # Set path for RANK model, load the model and solve for its steady state
-relative_path_rank = os.path.join("models", "med_scale_rank.yaml")
+relative_path_rank = os.path.join("models", "rank.yaml")
 full_path_rank = os.path.join(absolute_path, relative_path_rank)
 
 # Load baseline RANK model
@@ -59,7 +59,7 @@ rank_dictionary_0 = ep.parse(rank_model_loop)
 rank_copy_eta = copy.deepcopy(rank_dictionary_0)
 
 # Set path for TANK model, load the model and solve for its steady state
-relative_path_tank = os.path.join("models", "med_scale_tank.yaml")
+relative_path_tank = os.path.join("models", "tank.yaml")
 full_path_tank = os.path.join(absolute_path, relative_path_tank)
 
 # Load baseline TANK model
@@ -133,7 +133,7 @@ newnames = {'0.33':'0.33', '0.48': '0.48', '0.6299999999999999': '0.63',
 
 fig = px.line(impact_eta_lambda, markers = True, 
               color_discrete_sequence=px.colors.qualitative.Plotly[:len(eta_sequence)]) 
-fig.update_yaxes(range=[-4, 0.]) # Fix range of y-axis
+fig.update_yaxes(range=[-3., 0.]) # Fix range of y-axis
 fig.update_traces(line=dict(width=4),
                   marker=dict(size=14))
 fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
