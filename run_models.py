@@ -21,7 +21,7 @@ import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
 
-save_plot_yes = True # If true, it saves the plots after creating them
+save_plot_yes = False # If true, it saves the plots after creating them
 
 ###############################################################################
 ###############################################################################
@@ -30,7 +30,7 @@ save_plot_yes = True # If true, it saves the plots after creating them
 absolute_path = os.getcwd()
 
 # Set path for RANK model, load the model and solve for its steady state
-relative_path_rank = os.path.join("models", "med_scale_rank.yaml")
+relative_path_rank = os.path.join("models", "rank.yaml")
 full_path_rank = os.path.join(absolute_path, relative_path_rank)
 
 rank = full_path_rank
@@ -38,7 +38,7 @@ rank_mod = ep.load(rank)
 _ = rank_mod.solve_stst()
 
 # Set path for TANK model, load the model and solve for its steady state
-relative_path_tank = os.path.join("models", "med_scale_tank.yaml")
+relative_path_tank = os.path.join("models", "tank.yaml")
 full_path_tank = os.path.join(absolute_path, relative_path_tank)
 
 tank = full_path_tank
@@ -49,8 +49,8 @@ _ = tank_mod.solve_stst()
 ###############################################################################
 
 # Specify the shock here (one at a time)
-#specific_shock = ('e_z', 0.02) # Technology shock
-specific_shock = ('e_beta', 0.02) # Discount factor shock
+specific_shock = ('e_z', 0.02) # Technology shock
+#specific_shock = ('e_beta', 0.02) # Discount factor shock
 
 ###############################################################################
 ###############################################################################
@@ -78,14 +78,12 @@ horizon = 50 # Desired time horizon for the IRFs
 
 # Preparations for plots of key variables 
 
-# Extract key variables
-varlist_rank = 'c', 'n', 'pi', 'R', 'Rn', 'y', 'w', 'i', 'mc'
-varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'Rn', 'y', 'w', 'i', 'mc'
+# Extract key variables and find their indices
+varlist_rank = 'c', 'n', 'pi', 'R', 'RR', 'y', 'w', 'i'
+varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'RR', 'y', 'w', 'i'
 
 indx_rank = [rank_mod['variables'].index(v) for v in varlist_rank]
 indx_tank = [tank_mod['variables'].index(v) for v in varlist_tank]
-
-# Find indices
 
 # Consumption
 rank_c = indx_rank[0] # Aggregate consumption RANK
@@ -110,6 +108,8 @@ tank_w = indx_tank[10]
 # Interest Rates
 rank_r = indx_rank[3]
 tank_r = indx_tank[7]
+rank_rr = indx_rank[4]
+tank_rr = indx_tank[8]
 
 # Output 
 rank_y = indx_rank[5]
@@ -118,10 +118,6 @@ tank_y = indx_tank[9]
 # Investment 
 rank_inv = indx_rank[7]
 tank_inv = indx_tank[11]
-
-# Marginal Costs
-rank_mc = indx_rank[8]
-tank_mc = indx_tank[12]
 
 ###############################################################################
 
@@ -153,6 +149,8 @@ stst_tank_w = tank_x[-1, tank_w]
 # Interest Rates
 stst_rank_r = rank_x[-1,rank_r]
 stst_tank_r = tank_x[-1,tank_r]
+stst_rank_rr = rank_x[-1,rank_rr]
+stst_tank_rr = tank_x[-1,tank_rr]
 
 # Output 
 stst_rank_y = rank_x[-1,rank_y]
@@ -161,10 +159,6 @@ stst_tank_y = tank_x[-1,tank_y]
 # Investment 
 stst_rank_inv = rank_x[-1,rank_inv]
 stst_tank_inv = tank_x[-1,tank_inv]
-
-# Marginal Costs
-stst_rank_mc = rank_x[-1,rank_mc]
-stst_tank_mc = tank_x[-1,tank_mc]
 
 ###############################################################################
 ###############################################################################
@@ -322,6 +316,40 @@ if specific_shock[0] == 'e_beta' and save_plot_yes == True:
     full_path_plots_discount_interest = os.path.join(full_path_plots_discount, 
                                                      "discount_interest.svg")
     fig.write_image(full_path_plots_discount_interest)
+    
+###############################################################################    
+
+# Real Rate
+real_interest = np.column_stack([time, 
+                      percent*((rank_x[:horizon,rank_rr] - stst_rank_rr)/stst_rank_rr), 
+                      percent*((tank_x[:horizon,tank_rr] - stst_tank_rr)/stst_tank_rr)])
+real_interest = pd.DataFrame(real_interest, columns = ['Quarters', 'RANK', 'TANK'])
+
+# Plotting
+fig = px.line(real_interest, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
+fig.update_layout(title='', # Empty title
+                   xaxis_title='Quarters', # x-axis labeling
+                   yaxis_title='Real Interest Rate', # y-axis labeling
+                   font=dict(size=20),
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=6))
+fig.show() # Display plot
+
+# Save plot as SVG
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_rr = os.path.join(full_path_plots_technology, 
+                                                   "technology_rr.svg")
+    fig.write_image(full_path_plots_technology_rr)
+
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_rr = os.path.join(full_path_plots_discount, 
+                                                 "discount_rr.svg")
+    fig.write_image(full_path_plots_discount_rr)
 
 ###############################################################################
 
@@ -424,40 +452,6 @@ if specific_shock[0] == 'e_beta' and save_plot_yes == True:
     full_path_plots_discount_inv = os.path.join(full_path_plots_discount, 
                                                  "discount_inv.svg")
     fig.write_image(full_path_plots_discount_inv)
-    
-###############################################################################    
-
-# Marginal Costs
-mc = np.column_stack([time, 
-                      percent*((rank_x[:horizon,rank_mc] - stst_rank_mc)/stst_rank_mc), 
-                      percent*((tank_x[:horizon,tank_mc] - stst_tank_mc)/stst_tank_mc)])
-mc = pd.DataFrame(mc, columns = ['Quarters', 'RANK', 'TANK'])
-
-# Plotting
-fig = px.line(mc, x = "Quarters", y = ['RANK', 'TANK'],
-              color_discrete_map={'RANK': '#636EFA', 
-                                  'TANK': '#FFA15A'})
-fig.update_layout(title='', # Empty title
-                   xaxis_title='Quarters', # x-axis labeling
-                   yaxis_title='Marginal Costs', # y-axis labeling
-                   font=dict(size=20),
-                   legend=dict(orientation="h", # For horizontal legend
-                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
-                   legend_title=None, plot_bgcolor = 'whitesmoke', 
-                   margin=dict(l=15, r=15, t=5, b=5))
-fig.update_traces(line=dict(width=6))
-fig.show() # Display plot
-
-# Save plot as SVG
-if specific_shock[0] == 'e_z' and save_plot_yes == True:
-    full_path_plots_technology_mc = os.path.join(full_path_plots_technology, 
-                                                   "technology_mc.svg")
-    fig.write_image(full_path_plots_technology_mc)
-
-if specific_shock[0] == 'e_beta' and save_plot_yes == True:
-    full_path_plots_discount_mc = os.path.join(full_path_plots_discount, 
-                                                 "discount_mc.svg")
-    fig.write_image(full_path_plots_discount_mc)
 
 ###############################################################################
 ###############################################################################
