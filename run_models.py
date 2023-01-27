@@ -16,7 +16,7 @@ import os
 import econpizza as ep 
 import numpy as np
 import pandas as pd
-#from grgrlib import pplot # Import this for plotting all (!) variables
+from grgrlib import pplot # Import this for plotting all (!) variables
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "svg" # For plotting in the Spyder window
@@ -68,8 +68,8 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 
 horizon = 50 # Desired time horizon for the IRFs
 
-#pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
-#pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
+pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
+pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
 
 # Below, plots of key variables are created
 
@@ -79,8 +79,8 @@ horizon = 50 # Desired time horizon for the IRFs
 # Preparations for plots of key variables 
 
 # Extract key variables and find their indices
-varlist_rank = 'c', 'n', 'pi', 'R', 'RR', 'y', 'w', 'i'
-varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'RR', 'y', 'w', 'i'
+varlist_rank = 'c', 'n', 'pi', 'R', 'RR', 'y', 'w', 'i', 'prof'
+varlist_tank = 'c', 'cuu', 'chh', 'n', 'nuu', 'nhh', 'pi', 'R', 'RR', 'y', 'w', 'i', 'prof'
 
 indx_rank = [rank_mod['variables'].index(v) for v in varlist_rank]
 indx_tank = [tank_mod['variables'].index(v) for v in varlist_tank]
@@ -118,6 +118,10 @@ tank_y = indx_tank[9]
 # Investment 
 rank_inv = indx_rank[7]
 tank_inv = indx_tank[11]
+
+# Firm Profits
+rank_prof = indx_rank[8]
+tank_prof = indx_tank[12]
 
 ###############################################################################
 
@@ -159,6 +163,10 @@ stst_tank_y = tank_x[-1,tank_y]
 # Investment 
 stst_rank_inv = rank_x[-1,rank_inv]
 stst_tank_inv = tank_x[-1,tank_inv]
+
+# Firm Profits
+stst_rank_prof = rank_x[-1,rank_prof]
+stst_tank_prof = tank_x[-1,tank_prof]
 
 ###############################################################################
 ###############################################################################
@@ -452,6 +460,40 @@ if specific_shock[0] == 'e_beta' and save_plot_yes == True:
     full_path_plots_discount_inv = os.path.join(full_path_plots_discount, 
                                                  "discount_inv.svg")
     fig.write_image(full_path_plots_discount_inv)
+
+###############################################################################
+
+# Firm Profits
+profits = np.column_stack([time, 
+                             percent*((rank_x[:horizon,rank_prof] - stst_rank_prof)/stst_rank_prof), 
+                             percent*((tank_x[:horizon,tank_prof] - stst_tank_prof)/stst_tank_prof)])
+profits = pd.DataFrame(profits, columns = ['Quarters', 'RANK', 'TANK'])
+
+# Plotting
+fig = px.line(profits, x = "Quarters", y = ['RANK', 'TANK'],
+              color_discrete_map={'RANK': '#636EFA', 
+                                  'TANK': '#FFA15A'})
+fig.update_layout(title='', # Empty title
+                   xaxis_title='Quarters', # x-axis labeling
+                   yaxis_title='Firm Profits', # y-axis labeling
+                   font=dict(size=20),
+                   legend=dict(orientation="h", # For horizontal legend
+                               yanchor="bottom", y=1.02, xanchor="right", x=1), 
+                   legend_title=None, plot_bgcolor = 'whitesmoke', 
+                   margin=dict(l=15, r=15, t=5, b=5))
+fig.update_traces(line=dict(width=6))
+fig.show() # Display plot
+
+# Save plot as SVG
+if specific_shock[0] == 'e_z' and save_plot_yes == True:
+    full_path_plots_technology_prof = os.path.join(full_path_plots_technology, 
+                                                   "technology_prof.svg")
+    fig.write_image(full_path_plots_technology_prof)
+
+if specific_shock[0] == 'e_beta' and save_plot_yes == True:
+    full_path_plots_discount_prof = os.path.join(full_path_plots_discount, 
+                                                 "discount_prof.svg")
+    fig.write_image(full_path_plots_discount_prof)
 
 ###############################################################################
 ###############################################################################
