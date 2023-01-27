@@ -18,33 +18,33 @@ aux_equations: |
 
 equations:
       # HOUSEHOLD BLOCK
-    ~ w = chi*n**eta*(c - h*cLag)
-    ~ 1 = RR*hhdf
+    ~ w = chi*n**eta*(c - h*cLag) # labour supply
+    ~ 1 = RR*hhdf # Euler equation
     ~ RR = R/piPrime # real interest rate
-    ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c)
-    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + prof + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
+    ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c) # stochastic discount factor
+    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + prof + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof # budget constraint
 
-      # "BANKS" BLOCK
-    ~ ds = qb*b + q*k
-    ~ R = (1 + kappa*qbPrime)/qb
-    ~ R = Rk
-    ~ bprof = ((1+kappa*qb)*bLag + RkLag*qLag*kLag - RLag*ddLag)/pi
+      # "BANK" BLOCK
+    ~ ds = qb*b + q*k # supply of "bank" deposits, i.e. the "banks" balance sheet
+    ~ R = (1 + kappa*qbPrime)/qb # no arbitrage condition for the bond price 
+    ~ R = Rk # no arbitrage condition for the rental rate of capital
+    ~ bprof = ((1+kappa*qb)*bLag + RkLag*qLag*kLag - RLag*ddLag)/pi # "bank' profits
 
       # GOVERNMENT BLOCK
-    ~ g + (1+kappa*qb)/pi*bLag = qb*b + t
-    ~ g = 0.2*ySS
-    ~ b = ySS/qbSS
+    ~ g + (1+kappa*qb)/pi*bLag = qb*b + t # government budget constraint
+    ~ g = 0.2*ySS # level of government spending
+    ~ b = ySS/qbSS # level of outstanding government bonds, i.e. level of government debt
 
       # FIRMS BLOCK
-    ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2
+    ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2 # capital utilisation costs
     ~ MPK = par_cap_util0 + par_cap_util1/(1-par_cap_util1)*(cap_util - 1)
-    ~ MPK = alpha*mc*y/(cap_util*kLag)
+    ~ MPK = alpha*mc*y/(cap_util*kLag) # marginal product of capital
     ~ q*Rk/piPrime = MPKPrime*cap_utilPrime + (1-delta)*qPrime - cap_util_costs
-    ~ w = (1-alpha)*mc*y/n
-    ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y
-    ~ pitilde = piSS**omega * pi**(1-omega)
-    ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha)
-    ~ prof = (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y
+    ~ w = (1-alpha)*mc*y/n # real marginal costs
+    ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y # price NK Phillips Curve
+    ~ pitilde = piSS**omega * pi**(1-omega) # price indexation
+    ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha) # production function
+    ~ prof = (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y # firm profits
 
       # MONETARY POLICY BLOCK
     ~ Rn = ((RSS*((pi/piSS)**phi_pi)*((y/ySS)**phi_y))**(1-rho)*RnLag**rho) # Taylor rule for the notional nominal interest rate
@@ -97,5 +97,5 @@ steady_state:
         cap_util: 1. # steady state capital utilisation share
 
     init_guesses:
-        chi: 1e+1
-        MPK: alpha*mc/20
+        chi: 1e+1 # parameter on the disutility of labour
+        MPK: alpha*mc/20 # marginal product of capital
