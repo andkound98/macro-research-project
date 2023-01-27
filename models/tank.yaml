@@ -8,7 +8,7 @@
 ---
 
 name: 'tank'
-variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, chh, nhh, cuu, nuu, z, pitilde, RR]
+variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, chh, nhh, cuu, nuu, z, pitilde, RR, prof]
 parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, chi, par_cap_util1, omega, lam, rho_z, rho_beta ]
 shocks: [e_beta, e_z]
 
@@ -23,7 +23,7 @@ equations:
     ~ 1 = RR*hhdf # Euler equation
     ~ RR = R/piPrime # real interest rate
     ~ hhdf = betaPrime*(cuu - h*cLag)/(cuuPrime - h*c) # (stochastic) discount factor
-    ~ dd + cuu + t + Phi/2*(i/iLag - 1)**2*i = w*nuu + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof # budget constraint
+    ~ dd + cuu + t + Phi/2*(i/iLag - 1)**2*i = w*nuu + RLag/pi*ddLag + prof + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof # budget constraint
     
      # hand-to-mouth households
     ~ w = chi*nhh**eta*(chh - h*cLag) # labour supply 
@@ -53,6 +53,7 @@ equations:
     ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y # price NK Phillips Curve
     ~ pitilde = piSS**omega * pi**(1-omega) # price indexation
     ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha) # production function
+    ~ prof = (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y
 
       # MONETARY POLICY BLOCK
     ~ Rn = ((RSS*((pi/piSS)**phi_pi)*((y/ySS)**phi_y))**(1-rho)*RnLag**rho) # Taylor rule for the notional nominal interest rate
