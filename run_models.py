@@ -13,15 +13,24 @@
 
 # Import packages
 import os
+import time as tm
 import econpizza as ep 
 import numpy as np
 import pandas as pd
-from grgrlib import pplot # Import this for plotting all (!) variables
+#from grgrlib import pplot # Import this for plotting all (!) variables
 import plotly.express as px
 import plotly.io as pio
-pio.renderers.default = "svg" # For plotting in the Spyder window
 
+###############################################################################
+###############################################################################
+
+# Preliminaries
+
+pio.renderers.default = "svg" # For plotting in the Spyder window
 save_plot_yes = False # If true, it saves the plots after creating them
+start = tm.time() # Start timer
+
+horizon = 50 # Desired time horizon for the IRFs
 
 ###############################################################################
 ###############################################################################
@@ -64,12 +73,10 @@ tank_x, tank_flag = tank_mod.find_path(shock = specific_shock)
 ###############################################################################
 ###############################################################################
 
-# If desired, make plots for all (!) variables
+# If desired, make plots for all (!) variables specified in the models
 
-horizon = 50 # Desired time horizon for the IRFs
-
-pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
-pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
+#pplot(rank_x[:horizon], labels = rank_mod['variables']) # Plot IRFs of RANK
+#pplot(tank_x[:horizon], labels = tank_mod['variables']) # Plot IRFs of TANK
 
 # Below, plots of key variables are created
 
@@ -569,3 +576,9 @@ if specific_shock[0] == 'e_beta' and save_plot_yes == True:
     full_path_plots_discount_ind_n = os.path.join(full_path_plots_discount, 
                                                   "discount_ind_n.svg")
     fig.write_image(full_path_plots_discount_ind_n)
+
+###############################################################################
+###############################################################################
+
+# Print run time
+print('It took', (tm.time()-start)/60, 'minutes to execute this script.')
