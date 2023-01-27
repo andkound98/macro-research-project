@@ -129,7 +129,8 @@ for ee in eta_sequence:
 
 newnames = {'0.33':'0.33', '0.48': '0.48', '0.6299999999999999': '0.63', 
             '0.7799999999999999': '0.78', '0.9299999999999999': '0.93', 
-            '1.0': '1.0'} # Correct column names
+            '1.0': '1.0'} 
+            # Correct machine precision for readbale legend in plot
 
 fig = px.line(impact_eta_lambda, markers = True, 
               color_discrete_sequence=px.colors.qualitative.Plotly[:len(eta_sequence)]) 
