@@ -13,20 +13,23 @@
 
 # Import packages
 import os
+import time as tm
 import econpizza as ep
 import numpy as np
 import pandas as pd
 import copy
 import plotly.express as px
 import plotly.io as pio
-pio.renderers.default = "svg" # For plotting in the Spyder window
-
-save_plot_yes = False # If true, it saves the plots after creating them
 
 ###############################################################################
 ###############################################################################
 
 # Preliminaries 
+
+pio.renderers.default = "svg" # For plotting in the Spyder window
+save_plot_yes = False # If true, it saves the plots after creating them
+start = tm.time() # Start timer
+
 percent = 100 # Turn to 100 (1) if impact effect should (not) be in percent
 varlist_consumption = 'c' # Specify variable to be checked (here: aggregate 
                           # consumption)
@@ -152,9 +155,6 @@ fig.update_layout(title='', # Empty title
                    legend_title='\u03B7')
 fig.show() # Display plot
 
-###############################################################################
-###############################################################################
-
 # Save plot as SVG
 relative_path_plots = os.path.join("plots", "sensitivity")
 full_path_plots = os.path.join(absolute_path, relative_path_plots)
@@ -168,3 +168,9 @@ if specific_shock[0] == 'e_beta' and save_plot_yes == True:
     full_path_plots_sensitivity_discount = os.path.join(full_path_plots, 
                                                         "sensitivity_discount.svg")
     fig.write_image(full_path_plots_sensitivity_discount)
+
+###############################################################################
+###############################################################################
+
+# Print run time
+print('It took', (tm.time()-start)/60, 'minutes to execute this script.')
