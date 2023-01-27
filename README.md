@@ -4,8 +4,6 @@ By the end of January, I will collect in this repository the relevant material f
 
 In brief, the paper contrasts a two-agent New Keynesian model (TANK) to an otherwise unchanged non-linear medium-scale representative-agent New Keynesian model (RANK) by first discussing the changes needed to obtain the two-agent structure and consequently implementing the two models computationally to solve for the dynamics of TANK and RANK after two distinct shocks.
 
----
-
 ## `run_models.py`
 This code file implements the analyses of subsections 4.1 and 4.2 of the paper and produces the plots found therein.
 
@@ -20,4 +18,4 @@ Finally, the code produces the plots for figure 5 of the paper.
 
 ---
 
-All codes were run using the Spyder IDE 5.3.3 with Python 3.9.12 and [`econpizza`](https://pypi.org/project/econpizza/) 0.4.1 on macOS 12.6.1.
+All codes were run using the Spyder IDE 5.3.3 with Python 3.9.12 and [`econpizza`](https://pypi.org/project/econpizza/) 0.4.2 on macOS 12.6.1.
