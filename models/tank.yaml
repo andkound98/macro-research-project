@@ -22,7 +22,7 @@ equations:
     ~ w = chi*nuu**eta*(cuu - h*cLag) # labour supply
     ~ 1 = RR*hhdf # Euler equation
     ~ RR = R/piPrime # real interest rate
-    ~ hhdf = betaPrime*(cuu - h*cLag)/(cuuPrime - h*c) # (stochastic) discount factor
+    ~ hhdf = betaPrime*(cuu - h*cLag)/(cuuPrime - h*c) # stochastic discount factor
     ~ dd + cuu + t + Phi/2*(i/iLag - 1)**2*i = w*nuu + RLag/pi*ddLag + prof + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof # budget constraint
     
      # hand-to-mouth households
@@ -33,7 +33,7 @@ equations:
     ~ c = (1-lam)*cuu + lam*chh # aggregate consumption
     ~ n = (1-lam)*nuu + lam*nhh # aggregate labour hours
 
-      # "BANKS" BLOCK
+      # "BANK" BLOCK
     ~ ds = qb*b + q*k # supply of "bank" deposits, i.e. the "banks" balance sheet
     ~ R = (1 + kappa*qbPrime)/qb # no arbitrage condition for the bond price 
     ~ R = Rk # no arbitrage condition for the rental rate of capital
@@ -45,15 +45,15 @@ equations:
     ~ b = ySS/qbSS # level of outstanding government bonds, i.e. level of government debt
 
       # FIRMS BLOCK
-    ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2 # capital 
+    ~ cap_util_costs = par_cap_util0*(cap_util - 1) + par_cap_util1/(1-par_cap_util1)/2*(cap_util - 1)**2 # capital utilisation costs
     ~ MPK = par_cap_util0 + par_cap_util1/(1-par_cap_util1)*(cap_util - 1)
-    ~ MPK = alpha*mc*y/(cap_util*kLag)
+    ~ MPK = alpha*mc*y/(cap_util*kLag) # marginal product of capital
     ~ q*Rk/piPrime = MPKPrime*cap_utilPrime + (1-delta)*qPrime - cap_util_costs
-    ~ w = (1-alpha)*mc*y/n 
+    ~ w = (1-alpha)*mc*y/n # real marginal costs
     ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y # price NK Phillips Curve
     ~ pitilde = piSS**omega * pi**(1-omega) # price indexation
     ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha) # production function
-    ~ prof = (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y
+    ~ prof = (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y # firm profits
 
       # MONETARY POLICY BLOCK
     ~ Rn = ((RSS*((pi/piSS)**phi_pi)*((y/ySS)**phi_y))**(1-rho)*RnLag**rho) # Taylor rule for the notional nominal interest rate
@@ -107,5 +107,5 @@ steady_state:
         cap_util: 1. # steady state capital utilisation share
 
     init_guesses:
-        chi: 1e+1
-        MPK: alpha*mc/20
+        chi: 1e+1 # parameter on the disutility of labour
+        MPK: alpha*mc/20 # marginal product of capital
