@@ -8,7 +8,7 @@
 ---
 
 name: 'rank'
-variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, z, pitilde, RR]
+variables: [y, c, pi, R, Rn, Rk, beta, w, q, mc, k, i, n, hhdf, g, b, qb, t, ds, bprof, dd, MPK, cap_util, cap_util_costs, y_prod, z, pitilde, RR, prof]
 parameters: [ theta, kappa, psi, delta, alpha, Phi, phi_pi, phi_y, h, rho, eta, chi, par_cap_util1, omega, rho_z, rho_beta ]
 shocks: [e_beta, e_z]
 
@@ -22,7 +22,7 @@ equations:
     ~ 1 = RR*hhdf
     ~ RR = R/piPrime # real interest rate
     ~ hhdf = betaPrime*(c - h*cLag)/(cPrime - h*c)
-    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
+    ~ dd + c + t + Phi/2*(i/iLag - 1)**2*i = w*n + RLag/pi*ddLag + prof + (q*(1 - Phi/2*(i/iLag - 1)**2) - 1)*i + bprof
 
       # "BANKS" BLOCK
     ~ ds = qb*b + q*k
@@ -44,6 +44,7 @@ equations:
     ~ psi*(pi/pitildeLag - 1)*pi/pitildeLag = (1-theta) + theta*mc + psi*hhdf*(piPrime/pitilde - 1)*piPrime/pitilde*yPrime/y
     ~ pitilde = piSS**omega * pi**(1-omega)
     ~ y_prod = z*(kLag*cap_util)**alpha*n**(1-alpha)
+    ~ prof = (1 - mc - psi/2*(pi/pitildeLag - 1)**2)*y
 
       # MONETARY POLICY BLOCK
     ~ Rn = ((RSS*((pi/piSS)**phi_pi)*((y/ySS)**phi_y))**(1-rho)*RnLag**rho) # Taylor rule for the notional nominal interest rate
