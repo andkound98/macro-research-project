@@ -9,12 +9,14 @@ This code file implements the analyses of subsections 4.1 and 4.2 of the paper a
 
 The code first loads the files in which the RANK and TANK models are stored (from the `models` folder), then solves for the steady state of the respective model by the means of root-finding. Thereafter, one of the shocks is initiated, which is done by setting one of the two disturbances equal to $0.02$ (other values are also possible) in $t = 1$. 
 
-As a next step, the resulting (non-linear) equilibrium dynamics, i.e. the impulse responses to each of the shock are solved for, thereby guaranteeing that all variables return to their respective steady state within a prescribed period of time. The results for some important variables, on the aggregate as well as on the individual level, are then plotted. If desired, one can plot all variables' impulse responses as well.
+As a next step, the resulting (non-linear) equilibrium dynamics, i.e. the impulse responses to each of the shock are solved for, thereby guaranteeing that all variables return to their respective steady state within a prescribed period of time. The results for some key variables, on the aggregate as well as on the individual level, are then plotted. If desired, one can plot all variables' impulse responses as well.
 
 ## `run_tank_loop_eta_lambda.py`
-This file conducts the analysis of subsection 4.3. In particular, the code runs a double loop, which iterates over a sequence of values for $\eta$, thereby solving in each step the RANK model with that given value of $\eta$. In each iteration, the code also computes the corresponding TANK solution, while looping over a sequence of values for $\lambda$ in TANK. With this approach, each TANK model with different values of $\lambda$ can be compared to a respective RANK model with the same choice for $\eta$.
+This file conducts the analysis of subsection 4.3. In particular, the code runs a double loop, which iterates over a sequence of values for $\eta$, thereby solving in each step the RANK model with that given value of $\eta$. In each iteration, the code also loops over a sequence of values for $\lambda$ in TANK and computes the corresponding TANK models. With this approach, each of the TANK models with a different value for $\lambda$ can be compared to a respective RANK model with the same choice for $\eta$.
 
 Finally, the code produces the plots for figure 5 of the paper.
+
+Note that this code takes roughly six minutes to complete for each shock separately.
 
 ---
 
