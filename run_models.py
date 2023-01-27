@@ -6,7 +6,7 @@
 
 ###############################################################################
 ###############################################################################
-# This script compares non-linear medium-scale RANK and TANK modles after 
+# This script compares non-linear medium-scale RANK and TANK models after 
 # different shocks (a technology shock and a discount factor shock)
 ###############################################################################
 ###############################################################################
@@ -338,7 +338,8 @@ if specific_shock[0] == 'e_beta' and save_plot_yes == True:
 real_interest = np.column_stack([time, 
                       percent*((rank_x[:horizon,rank_rr] - stst_rank_rr)/stst_rank_rr), 
                       percent*((tank_x[:horizon,tank_rr] - stst_tank_rr)/stst_tank_rr)])
-real_interest = pd.DataFrame(real_interest, columns = ['Quarters', 'RANK', 'TANK'])
+real_interest = pd.DataFrame(real_interest, 
+                             columns = ['Quarters', 'RANK', 'TANK'])
 
 # Plotting
 fig = px.line(real_interest, x = "Quarters", y = ['RANK', 'TANK'],
